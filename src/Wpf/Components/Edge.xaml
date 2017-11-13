@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="M4Graphs.Wpf.Components.Edge"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:M4Graphs.Wpf.Components"
+             xmlns:shapes="clr-namespace:M4Graphs.Wpf.Shapes"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid x:Name="EdgeGrid">
+        <shapes:PolylineArrow MouseEnter="EdgeText_MouseEnter" MouseLeave="EdgeText_MouseLeave" MouseDown="EdgeArrow_MouseDown" x:Name="EdgeArrow" Stroke="Black" StrokeThickness="2" HeadHeight="5" HeadWidth="4"/>
+        <shapes:PolylineArrow MouseEnter="EdgeText_MouseEnter" MouseLeave="EdgeText_MouseLeave" MouseDown="EdgeArrow_MouseDown" x:Name="EdgeMouseOver" Stroke="Transparent" StrokeThickness="10" HeadHeight="5" HeadWidth="4"/>
+        <!--<TextBlock x:Name="EdgeText" Foreground="Black" TextAlignment="Center" VerticalAlignment="Center"/>-->
+        <local:StrokeTextBlock IsHitTestVisible="False" x:Name="EdgeText" TextBrush="White" StrokeBrush="Black" VerticalAlignment="Top" HorizontalAlignment="Left" TextAlignment="Left"/>
+    </Grid>
+</UserControl>
