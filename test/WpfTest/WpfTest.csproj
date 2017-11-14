@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -86,6 +89,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -95,13 +99,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Core\Core.csproj">
-      <Project>{B1B25CFE-D71D-4AA3-B339-2ED72FB85FD0}</Project>
-      <Name>Core</Name>
+    <ProjectReference Include="..\..\src\Core\M4Graphs.Core.csproj">
+      <Project>{b1b25cfe-d71d-4aa3-b339-2ed72fb85fd0}</Project>
+      <Name>M4Graphs.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Wpf\Wpf.csproj">
+    <ProjectReference Include="..\..\src\Wpf\M4Graphs.Wpf.csproj">
       <Project>{d58d0b8a-3e09-40d0-933c-620cfb228179}</Project>
-      <Name>Wpf</Name>
+      <Name>M4Graphs.Wpf</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

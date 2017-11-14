@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using FluentAssertions;
 using System.Collections.Generic;
 using M4Graphs.Core;
+using FluentAssertions;
 
 namespace M4Graphs.CoreTest
 {

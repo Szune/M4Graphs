@@ -1,0 +1,1 @@
+nuget pack Wpf.csproj -IncludeReferencedProjects

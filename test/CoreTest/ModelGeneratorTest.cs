@@ -1,7 +1,7 @@
-﻿using M4Graphs.Core;
+﻿using FluentAssertions;
+using M4Graphs.Core;
 using M4Graphs.Core.General;
 using M4Graphs.Core.ModelElements;
-using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace M4Graphs.CoreTest
