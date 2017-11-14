@@ -1,1 +1,1 @@
-nuget pack Core.csproj
+nuget pack M4Graphs.Core.csproj

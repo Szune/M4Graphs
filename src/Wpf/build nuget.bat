@@ -1,1 +1,1 @@
-nuget pack Wpf.csproj -IncludeReferencedProjects
+nuget pack M4Graphs.Wpf.csproj -IncludeReferencedProjects

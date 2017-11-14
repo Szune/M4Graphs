@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("M4Graphs.Core")]
-[assembly: AssemblyDescription("A framework for intended for visualizing model based tests during runtime.")]
+[assembly: AssemblyDescription("A framework intended for visualizing model based tests during runtime.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("M4Graphs.Core")]
@@ -34,5 +34,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2017.11.14.0023")]
-[assembly: AssemblyFileVersion("2017.11.14.0023")]
+[assembly: AssemblyVersion("2017.11.14.0147")]
+[assembly: AssemblyFileVersion("2017.11.14.0147")]

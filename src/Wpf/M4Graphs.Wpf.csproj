@@ -2,7 +2,7 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D58D0B8A-3E09-40D0-933C-620CFB228179}</ProjectGuid>
     <OutputType>library</OutputType>
@@ -109,14 +109,14 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Wpf.nuspec" />
+    <None Include="M4Graphs.Wpf.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\M4Graphs.Core.csproj">
-      <Project>{B1B25CFE-D71D-4AA3-B339-2ED72FB85FD0}</Project>
+      <Project>{b1b25cfe-d71d-4aa3-b339-2ed72fb85fd0}</Project>
       <Name>M4Graphs.Core</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
