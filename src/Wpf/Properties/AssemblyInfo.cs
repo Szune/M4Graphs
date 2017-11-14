@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("M4Graphs.Wpf")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A WPF implementation of M4Graphs.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("M4Graphs.Wpf")]
@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2017.11.13.2335")]
-[assembly: AssemblyFileVersion("2017.11.13.2335")]
+[assembly: AssemblyVersion("2017.11.14.0034")]
+[assembly: AssemblyFileVersion("2017.11.14.0034")]
