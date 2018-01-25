@@ -69,7 +69,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Parsers\M4Graphs.Parsers.csproj">
+    <ProjectReference Include="..\..\src\Parsers\M4Graphs.Parsers.csproj">
       <Project>{99369CCE-34C6-4CB8-B183-49AA36C8C323}</Project>
       <Name>M4Graphs.Parsers</Name>
     </ProjectReference>

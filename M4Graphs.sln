@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4Graphs.Wpf", "src\Wpf\M4Graphs.Wpf.csproj", "{D58D0B8A-3E09-40D0-933C-620CFB228179}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4GraphsTest", "test\CoreTest\M4GraphsTest.csproj", "{EE4B73CC-7981-40CD-8F8A-3DF5929F58A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4GraphsTest", "test\M4GraphsTest\M4GraphsTest.csproj", "{EE4B73CC-7981-40CD-8F8A-3DF5929F58A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4Graphs.Core", "src\Core\M4Graphs.Core.csproj", "{B1B25CFE-D71D-4AA3-B339-2ED72FB85FD0}"
 EndProject
@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{389B2919-9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4Graphs.Generators", "src\Generators\M4Graphs.Generators.csproj", "{378EAD75-DB8D-4A1E-8B1A-9D274E190D5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4Graphs.Parsers", "Parsers\M4Graphs.Parsers.csproj", "{99369CCE-34C6-4CB8-B183-49AA36C8C323}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4Graphs.Parsers", "src\Parsers\M4Graphs.Parsers.csproj", "{99369CCE-34C6-4CB8-B183-49AA36C8C323}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

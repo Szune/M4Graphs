@@ -51,7 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\Core\M4Graphs.Core.csproj">
+    <ProjectReference Include="..\Core\M4Graphs.Core.csproj">
       <Project>{B1B25CFE-D71D-4AA3-B339-2ED72FB85FD0}</Project>
       <Name>M4Graphs.Core</Name>
     </ProjectReference>
