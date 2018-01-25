@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,12 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\Graphml\EdgeLabels\EdgeLabel.cs" />
     <Compile Include="DrawableModelElements\IEdgeLabel.cs" />
-    <Compile Include="Converters\Graphml\EdgeLabels\SmartEdgeLabel.cs" />
-    <Compile Include="Converters\Graphml\Graphml.cs" />
-    <Compile Include="Converters\Graphml\GraphmlElementFormatException.cs" />
-    <Compile Include="Converters\Graphml\SerializableGraphml.cs" />
     <Compile Include="DrawableModelElements\DrawableEdge.cs" />
     <Compile Include="DrawableModelElements\DrawableElementCollection.cs" />
     <Compile Include="DrawableModelElements\DrawableNode.cs" />
@@ -61,10 +53,7 @@
     <Compile Include="IModel.cs" />
     <Compile Include="Interfaces\IActivatable.cs" />
     <Compile Include="Interfaces\IDynamicModelElement.cs" />
-    <Compile Include="ModelGenerator.cs" />
-    <Compile Include="ModelGeneratorBuilder.cs" />
-    <Compile Include="ModelReader.cs" />
-    <Compile Include="ModelReaderBuilder.cs" />
+    <Compile Include="General\Margin.cs" />
     <Compile Include="UnknownElementException.cs" />
     <Compile Include="General\Boundaries.cs" />
     <Compile Include="Interfaces\IDynamicGraphModel.cs" />
@@ -78,13 +67,11 @@
     <Compile Include="ModelElements\EdgeNotConnectedException.cs" />
     <Compile Include="General\PathPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model.cs" />
     <Compile Include="HeatMap.cs" />
     <Compile Include="ModelElementFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="M4Graphs.Core.nuspec" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

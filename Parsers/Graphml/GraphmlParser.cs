@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using M4Graphs.Core;
 using M4Graphs.Core.DrawableModelElements;
-using M4Graphs.Core.Converters;
+using M4Graphs.Parsers.Graphml;
+using System;
 using System.IO;
-using M4Graphs.Core.Converters.Graphml;
 
-namespace M4Graphs.Core
+namespace M4Graphs.Parsers.Graphml
 {
     /// <summary>
     /// An <see cref="IModel"/> reading elements from a file.
     /// </summary>
-    public class ModelReader : IModel
+    public class GraphmlParser : IModel, IModelParser
     {
         private DrawableElementCollection _elements;
 
@@ -40,12 +36,15 @@ namespace M4Graphs.Core
 
         private ReadFrom _readFrom = ReadFrom.None;
 
-        internal ModelReader()
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        public GraphmlParser()
         {
 
         }
 
-        private ModelReader(DrawableElementCollection elements)
+        private GraphmlParser(DrawableElementCollection elements)
         {
             _elements = elements;
             _readFrom = ReadFrom.None;
@@ -58,7 +57,7 @@ namespace M4Graphs.Core
             _readFrom = ReadFrom.File;
         }
 
-        public void SetGraphmlString(string graphml)
+        public void SetModelString(string graphml)
         {
             _graphml = graphml;
             _readFrom = ReadFrom.String;
@@ -70,30 +69,30 @@ namespace M4Graphs.Core
         }
 
         /// <summary>
-        /// Returns a new <see cref="ModelReader"/> containing elements parsed by reading a yEd .graphml file.
+        /// Returns a new <see cref="GraphmlParser"/> containing elements parsed by reading a yEd .graphml file.
         /// </summary>
         /// <param name="filePath">The path to the .graphml file.</param>
         /// <param name="xOffset">Offsets all elements' x-coordinate in the model by the specified amount.</param>
         /// <param name="yOffset">Offsets all elements' y-coordinate in the model by the specified amount.</param>
         /// <returns></returns>
-        public static ModelReader GraphmlFromFile(string filePath, int xOffset = 0, int yOffset = 0)
+        public static GraphmlParser GraphmlFromFile(string filePath, int xOffset = 0, int yOffset = 0)
         {
             using (var text = new StreamReader(filePath))
             {
-                return new ModelReader(Graphml.ToDrawableElementCollection(text.ReadToEnd(), xOffset, yOffset));
+                return new GraphmlParser(Graphml.GraphmlStringParser.ToDrawableElementCollection(text.ReadToEnd(), xOffset, yOffset));
             }
         }
 
         /// <summary>
-        /// Returns a new <see cref="ModelReader"/> containing elements parsed by reading a yEd graphml string.
+        /// Returns a new <see cref="GraphmlParser"/> containing elements parsed by reading a yEd graphml string.
         /// </summary>
         /// <param name="graphml">The entire graphml string.</param>
         /// <param name="xOffset">Offsets all elements' x-coordinate in the model by the specified amount.</param>
         /// <param name="yOffset">Offsets all elements' y-coordinate in the model by the specified amount.</param>
         /// <returns></returns>
-        public static ModelReader GraphmlFromString(string graphml, int xOffset = 0, int yOffset = 0)
+        public static GraphmlParser GraphmlFromString(string graphml, int xOffset = 0, int yOffset = 0)
         {
-            return new ModelReader(Graphml.ToDrawableElementCollection(graphml, xOffset, yOffset));
+            return new GraphmlParser(Graphml.GraphmlStringParser.ToDrawableElementCollection(graphml, xOffset, yOffset));
         }
 
         /// <summary>
@@ -107,7 +106,7 @@ namespace M4Graphs.Core
                 case ReadFrom.String:
                     if (_elements?.Count > 0)
                         return _elements;
-                    _elements = Graphml.ToDrawableElementCollection(_graphml, _xOffset, _yOffset);
+                    _elements = Graphml.GraphmlStringParser.ToDrawableElementCollection(_graphml, _xOffset, _yOffset);
                     return _elements;
                 case ReadFrom.File:
                     if (_elements?.Count > 0)
@@ -128,7 +127,7 @@ namespace M4Graphs.Core
         {
             using (var text = new StreamReader(filePath))
             {
-                return Graphml.ToDrawableElementCollection(text.ReadToEnd(), xOffset, yOffset);
+                return Graphml.GraphmlStringParser.ToDrawableElementCollection(text.ReadToEnd(), xOffset, yOffset);
             }
         }
 

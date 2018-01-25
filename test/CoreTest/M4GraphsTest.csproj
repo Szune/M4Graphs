@@ -7,8 +7,8 @@
     <ProjectGuid>{EE4B73CC-7981-40CD-8F8A-3DF5929F58A0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>M4Graphs.CoreTest</RootNamespace>
-    <AssemblyName>CoreTest</AssemblyName>
+    <RootNamespace>M4GraphsTest</RootNamespace>
+    <AssemblyName>M4GraphsTest</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -59,20 +59,32 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuilderTest.cs" />
-    <Compile Include="ConverterTest.cs" />
-    <Compile Include="HeatMapTest.cs" />
-    <Compile Include="ModelGeneratorTest.cs" />
+    <Compile Include="Core\BuilderTest.cs" />
+    <Compile Include="Core\ConverterTest.cs" />
+    <Compile Include="Core\HeatMapTest.cs" />
+    <Compile Include="Core\ModelGeneratorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Parsers\M4Graphs.Parsers.csproj">
+      <Project>{99369CCE-34C6-4CB8-B183-49AA36C8C323}</Project>
+      <Name>M4Graphs.Parsers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\M4Graphs.Core.csproj">
       <Project>{b1b25cfe-d71d-4aa3-b339-2ed72fb85fd0}</Project>
       <Name>M4Graphs.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Generators\M4Graphs.Generators.csproj">
+      <Project>{378EAD75-DB8D-4A1E-8B1A-9D274E190D5E}</Project>
+      <Name>M4Graphs.Generators</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Generators\" />
+    <Folder Include="Parsers\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

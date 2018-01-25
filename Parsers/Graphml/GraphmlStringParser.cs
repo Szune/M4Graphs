@@ -1,16 +1,15 @@
-﻿using M4Graphs.Core.Converters.Graphml.EdgeLabels;
-using M4Graphs.Core.DrawableModelElements;
-using M4Graphs.Core.General;
+﻿using M4Graphs.Core.DrawableModelElements;
+using M4Graphs.Parsers.Graphml.EdgeLabels;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace M4Graphs.Core.Converters.Graphml
+namespace M4Graphs.Parsers.Graphml
 {
     /// <summary>
-    /// Helper class for converting from yEd graphml to something usable by DGML.
+    /// Helper class for converting from yEd graphml to something usable by M4Graphs.
     /// </summary>
-    public static class Graphml
+    public static class GraphmlStringParser
     {
         /// <summary>
         /// Namespace "y" in yEd graphml.

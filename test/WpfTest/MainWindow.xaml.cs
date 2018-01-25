@@ -36,7 +36,7 @@ namespace M4Graphs.WpfTest
         {
             Reset();
 
-            var reader = Model.Reader.FromFile(@"E:\exempel.graphml").Offset(20, 20).Build();
+            var reader = Model.Reader.FromFile(@"D:\exempel.graphml").Offset(20, 20).Build();
             dgm.Draw(reader.GetElements());
             CreatePreconditionsForSimulatingTheModel();
             //CreatePreconditionsForBuildingTheModel();

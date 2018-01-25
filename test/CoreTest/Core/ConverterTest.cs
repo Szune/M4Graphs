@@ -1,14 +1,8 @@
-﻿using M4Graphs.Core.Converters;
-using M4Graphs.Core.Converters.Graphml;
+﻿using M4Graphs.Parsers.Graphml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace M4Graphs.CoreTest
+namespace M4GraphsTest.Core
 {
     [TestClass]
     public class ConverterTest
@@ -17,7 +11,7 @@ namespace M4Graphs.CoreTest
         public void ManualTest_TestGraphmlConversion()
         {
             var text = new StreamReader(@"E:\exempel.graphml").ReadToEnd();
-            var tree = Graphml.ToDrawableElementCollection(text);
+            var tree = GraphmlStringParser.ToDrawableElementCollection(text);
         }
     }
 }

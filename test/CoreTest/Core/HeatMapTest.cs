@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using M4Graphs.Core;
 using FluentAssertions;
 
-namespace M4Graphs.CoreTest
+namespace M4GraphsTest.Core
 {
     [TestClass]
     public class HeatMapTest

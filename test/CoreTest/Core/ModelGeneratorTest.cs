@@ -2,20 +2,21 @@
 using M4Graphs.Core;
 using M4Graphs.Core.General;
 using M4Graphs.Core.ModelElements;
+using M4Graphs.Generators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace M4Graphs.CoreTest
+namespace M4GraphsTest.Core
 {
     [TestClass]
     public class ModelGeneratorTest
     {
-        private ModelGenerator model;
+        private DefaultModelGenerator model;
         private ModelNode node;
         private ModelEdge edge;
         [TestInitialize]
         public void Initialize()
         {
-            model = new ModelGenerator();
+            model = new DefaultModelGenerator();
             node = ModelElementFactory.CreateNode("n1", "Start");
             edge = ModelElementFactory.CreateEdge("e1", "DoThing");
         }

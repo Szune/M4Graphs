@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace M4Graphs.Core.Converters.Graphml
+namespace M4Graphs.Parsers.Graphml
 {
     /// <summary>
-    /// The exception that is thrown when the <see cref="Graphml"/> converter is unable to
+    /// The exception that is thrown when the <see cref="GraphmlStringParser"/> converter is unable to
     /// discern an element's type.
     /// </summary>
     public class GraphmlElementFormatException : Exception

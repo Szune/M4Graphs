@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using M4Graphs.Core.DrawableModelElements;
 using M4Graphs.Core.General;
-using M4Graphs.Core.DrawableModelElements;
+using System;
 
-namespace M4Graphs.Core.Converters.Graphml.EdgeLabels
+namespace M4Graphs.Parsers.Graphml.EdgeLabels
 {
     public class SmartEdgeLabel : IEdgeLabel
     {

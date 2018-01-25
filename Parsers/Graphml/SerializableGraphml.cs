@@ -1,12 +1,9 @@
 ﻿using M4Graphs.Core.General;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace M4Graphs.Core.Converters.Graphml
+namespace M4Graphs.Parsers.Graphml
 {
     /// <summary>
     /// Graphml root.
@@ -90,19 +87,19 @@ namespace M4Graphs.Core.Converters.Graphml
         /// <summary>
         /// ShapeNode element.
         /// </summary>
-        [XmlElement("ShapeNode", Namespace = Graphml.Namespace_y)]
+        [XmlElement("ShapeNode", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlShapeNode ShapeNode { get; set; }
 
         /// <summary>
         /// PolyLineEdge element.
         /// </summary>
-        [XmlElement("PolyLineEdge", Namespace = Graphml.Namespace_y)]
+        [XmlElement("PolyLineEdge", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlPolyLineEdge PolyLineEdge { get; set; }
 
         /// <summary>
         /// GenericNode element.
         /// </summary>
-        [XmlElement("GenericNode", Namespace = Graphml.Namespace_y)]
+        [XmlElement("GenericNode", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlGenericNode GenericNode { get; set; }
     }
 
@@ -114,27 +111,27 @@ namespace M4Graphs.Core.Converters.Graphml
         /// <summary>
         /// Geometry element.
         /// </summary>
-        [XmlElement("Geometry", Namespace = Graphml.Namespace_y)]
+        [XmlElement("Geometry", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlGeometry Geometry { get; set; }
         /// <summary>
         /// Fill element.
         /// </summary>
-        [XmlElement("Fill", Namespace = Graphml.Namespace_y)]
+        [XmlElement("Fill", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlFill Fill { get; set; }
         /// <summary>
         /// BorderStyle element.
         /// </summary>
-        [XmlElement("BorderStyle", Namespace = Graphml.Namespace_y)]
+        [XmlElement("BorderStyle", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlBorderStyle BorderStyle { get; set; }
         /// <summary>
         /// NodeLabel element.
         /// </summary>
-        [XmlElement("NodeLabel", Namespace = Graphml.Namespace_y)]
+        [XmlElement("NodeLabel", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlNodeLabel NodeLabel { get; set; }
         /// <summary>
         /// Shape element.
         /// </summary>
-        [XmlElement("Shape", Namespace = Graphml.Namespace_y)]
+        [XmlElement("Shape", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlShape Shape { get; set; }
     }
 
@@ -152,22 +149,22 @@ namespace M4Graphs.Core.Converters.Graphml
         /// <summary>
         /// Geometry element.
         /// </summary>
-        [XmlElement("Geometry", Namespace = Graphml.Namespace_y)]
+        [XmlElement("Geometry", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlGeometry Geometry { get; set; }
         /// <summary>
         /// Fill element.
         /// </summary>
-        [XmlElement("Fill", Namespace = Graphml.Namespace_y)]
+        [XmlElement("Fill", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlFill Fill { get; set; }
         /// <summary>
         /// BorderStyle element.
         /// </summary>
-        [XmlElement("BorderStyle", Namespace = Graphml.Namespace_y)]
+        [XmlElement("BorderStyle", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlBorderStyle BorderStyle { get; set; }
         /// <summary>
         /// NodeLabel element.
         /// </summary>
-        [XmlElement("NodeLabel", Namespace = Graphml.Namespace_y)]
+        [XmlElement("NodeLabel", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlNodeLabel NodeLabel { get; set; }
     }
 
@@ -342,13 +339,13 @@ namespace M4Graphs.Core.Converters.Graphml
         /// <summary>
         /// LabelModel element.
         /// </summary>
-        [XmlElement("LabelModel", Namespace = Graphml.Namespace_y)]
+        [XmlElement("LabelModel", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlNodeLabelModel LabelModel { get; set; }
 
         /// <summary>
         /// ModelParameter element.
         /// </summary>
-        [XmlElement("ModelParameter", Namespace = Graphml.Namespace_y)]
+        [XmlElement("ModelParameter", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlNodeModelParameter ModelParameter { get; set; }
     }
 
@@ -360,7 +357,7 @@ namespace M4Graphs.Core.Converters.Graphml
         /// <summary>
         /// SmartNodeLabelModel element.
         /// </summary>
-        [XmlElement("SmartNodeLabelModel", Namespace = Graphml.Namespace_y)]
+        [XmlElement("SmartNodeLabelModel", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlSmartNodeLabelModel SmartNodeLabelModel { get; set; }
     }
 
@@ -384,7 +381,7 @@ namespace M4Graphs.Core.Converters.Graphml
         /// <summary>
         /// SmartNodeLabelModelParameter element.
         /// </summary>
-        [XmlElement("SmartNodeLabelModelParameter", Namespace = Graphml.Namespace_y)]
+        [XmlElement("SmartNodeLabelModelParameter", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlSmartNodeLabelModelParameter SmartNodeLabelModelParameter { get; set; }
     }
 
@@ -455,27 +452,27 @@ namespace M4Graphs.Core.Converters.Graphml
         /// <summary>
         /// Path element.
         /// </summary>
-        [XmlElement("Path", Namespace = Graphml.Namespace_y)]
+        [XmlElement("Path", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlPath Path { get; set; }
         /// <summary>
         /// LineStyle element.
         /// </summary>
-        [XmlElement("LineStyle", Namespace = Graphml.Namespace_y)]
+        [XmlElement("LineStyle", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlLineStyle LineStyle { get; set; }
         /// <summary>
         /// Arrows element.
         /// </summary>
-        [XmlElement("Arrows", Namespace = Graphml.Namespace_y)]
+        [XmlElement("Arrows", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlArrows Arrows { get; set; }
         /// <summary>
         /// EdgeLabel element.
         /// </summary>
-        [XmlElement("EdgeLabel", Namespace = Graphml.Namespace_y)]
+        [XmlElement("EdgeLabel", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlEdgeLabel EdgeLabel { get; set; }
         /// <summary>
         /// BendStyle element.
         /// </summary>
-        [XmlElement("BendStyle", Namespace = Graphml.Namespace_y)]
+        [XmlElement("BendStyle", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlBendStyle BendStyle { get; set; }
     }
 
@@ -594,19 +591,19 @@ namespace M4Graphs.Core.Converters.Graphml
         /// <summary>
         /// LabelModel element.
         /// </summary>
-        [XmlElement("LabelModel", Namespace = Graphml.Namespace_y)]
+        [XmlElement("LabelModel", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlEdgeLabelModel LabelModel { get; set; }
 
         /// <summary>
         /// ModelParameter element.
         /// </summary>
-        [XmlElement("ModelParameter", Namespace = Graphml.Namespace_y)]
+        [XmlElement("ModelParameter", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlEdgeModelParameter ModelParameter { get; set; }
 
         /// <summary>
         /// PreferredPlacementDescriptor element.
         /// </summary>
-        [XmlElement("PreferredPlacementDescriptor", Namespace = Graphml.Namespace_y)]
+        [XmlElement("PreferredPlacementDescriptor", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlPreferredPlacementDescriptor PreferredPlacementDescriptor { get; set; }
     }
 
@@ -670,7 +667,7 @@ namespace M4Graphs.Core.Converters.Graphml
         /// <summary>
         /// SmartEdgeLabelModel element.
         /// </summary>
-        [XmlElement("SmartEdgeLabelModel", Namespace = Graphml.Namespace_y)]
+        [XmlElement("SmartEdgeLabelModel", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlSmartEdgeLabelModel SmartEdgeLabelModel { get; set; }
     }
 
@@ -705,7 +702,7 @@ namespace M4Graphs.Core.Converters.Graphml
         /// <summary>
         /// SmartEdgeLabelModelParameter element.
         /// </summary>
-        [XmlElement("SmartEdgeLabelModelParameter", Namespace = Graphml.Namespace_y)]
+        [XmlElement("SmartEdgeLabelModelParameter", Namespace = GraphmlStringParser.Namespace_y)]
         public GraphmlSmartEdgeLabelModelParameter SmartEdgeLabelModelParameter { get; set; }
     }
 
@@ -826,7 +823,7 @@ namespace M4Graphs.Core.Converters.Graphml
         /// <summary>
         /// Point elements.
         /// </summary>
-        [XmlElement("Point", Namespace = Graphml.Namespace_y)]
+        [XmlElement("Point", Namespace = GraphmlStringParser.Namespace_y)]
         public List<GraphmlPoint> Points { get; set; }
 
         /// <summary>

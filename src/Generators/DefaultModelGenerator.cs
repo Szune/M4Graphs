@@ -1,25 +1,23 @@
-﻿using System;
+﻿using M4Graphs.Core;
+using M4Graphs.Core.DrawableModelElements;
+using M4Graphs.Core.General;
+using M4Graphs.Core.ModelElements;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using M4Graphs.Core.DrawableModelElements;
-using M4Graphs.Core.ModelElements;
-using M4Graphs.Core.General;
 
-namespace M4Graphs.Core
+namespace M4Graphs.Generators
 {
     /// <summary>
     /// An <see cref="IModel"/> generating the model during runtime.
     /// </summary>
-    public class ModelGenerator : IModel
+    public class DefaultModelGenerator : IModel, IModelGenerator
     {
-        internal int _xMargin;
-        internal int _yMargin;
+        private const string CLEARED_NODE = "CLEARED_NODE";
+        public Margin Margins;
 
-        internal ModelNode StartNode;
-        internal readonly Dictionary<string, ModelNode> Nodes = new Dictionary<string, ModelNode>();
-        internal readonly Dictionary<string, ModelEdge> Edges = new Dictionary<string, ModelEdge>();
+        public ModelNode StartNode;
+        public readonly Dictionary<string, ModelNode> Nodes = new Dictionary<string, ModelNode>();
+        public readonly Dictionary<string, ModelEdge> Edges = new Dictionary<string, ModelEdge>();
 
         /// <summary>
         /// dictionary&lt;y, amount of nodes&gt;
@@ -30,7 +28,10 @@ namespace M4Graphs.Core
         /// </summary>
         public Dictionary<string, int> EdgesFromNode = new Dictionary<string, int>();
 
-        internal ModelGenerator()
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        public DefaultModelGenerator()
         {
 
         }
@@ -38,29 +39,22 @@ namespace M4Graphs.Core
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="xMargin"></param>
-        /// <param name="yMargin"></param>
-        public ModelGenerator(int xMargin, int yMargin)
+        public DefaultModelGenerator(int xMargin, int yMargin)
         {
-            _xMargin = xMargin;
-            _yMargin = yMargin;
+            Margins = new Margin(xMargin, yMargin);
         }
 
         /// <summary>
         /// Sets the margins used when drawing.
         /// </summary>
-        /// <param name="xMargin"></param>
-        /// <param name="yMargin"></param>
         public void SetMargins(int xMargin, int yMargin)
         {
-            _xMargin = xMargin;
-            _yMargin = yMargin;
+            Margins = new Margin(xMargin, yMargin);
         }
 
         /// <summary>
         /// Sets the start node.
         /// </summary>
-        /// <param name="start"></param>
         public void SetStartNode(ModelNode start)
         {
             Reset(start);
@@ -71,7 +65,6 @@ namespace M4Graphs.Core
         /// <summary>
         /// Adds another start node.
         /// </summary>
-        /// <param name="node"></param>
         public void AddStartNode(ModelNode node)
         {
             node.SetPosition(GetNodesAtY(0), 0);
@@ -127,7 +120,7 @@ namespace M4Graphs.Core
         {
             Nodes.Clear();
             Edges.Clear();
-            StartNode = new ModelNode("CLEARED_NODE", "CLEARED_NODE");
+            StartNode = new ModelNode(CLEARED_NODE, CLEARED_NODE);
         }
 
         /// <summary>
@@ -144,11 +137,10 @@ namespace M4Graphs.Core
         /// <summary>
         /// Returns the elements generated.
         /// </summary>
-        /// <returns></returns>
         public DrawableElementCollection GetElements()
         {
-            var nodes = Nodes.Select(node => node.Value.ToGeneratedDrawable(_xMargin, _yMargin)).ToDictionary(node => node.Id);
-            var edges = Edges.Select(edge => edge.Value.ToGeneratedDrawable(_xMargin, _yMargin)).ToDictionary(edge => edge.Id);
+            var nodes = Nodes.Select(node => node.Value.ToGeneratedDrawable(Margins.X, Margins.Y)).ToDictionary(node => node.Id);
+            var edges = Edges.Select(edge => edge.Value.ToGeneratedDrawable(Margins.X, Margins.Y)).ToDictionary(edge => edge.Id);
 
             var collection = new DrawableElementCollection
             {
