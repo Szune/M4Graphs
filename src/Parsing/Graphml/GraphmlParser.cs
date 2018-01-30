@@ -1,6 +1,5 @@
 ﻿using M4Graphs.Core;
 using M4Graphs.Core.DrawableModelElements;
-using M4Graphs.Parsers.Graphml;
 using System;
 using System.IO;
 

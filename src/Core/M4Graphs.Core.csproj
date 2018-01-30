@@ -50,6 +50,7 @@
     <Compile Include="DrawableModelElements\IDrawableNode.cs" />
     <Compile Include="General\ElementState.cs" />
     <Compile Include="General\IFilter.cs" />
+    <Compile Include="Geometry\Coordinates.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="Interfaces\IActivatable.cs" />
     <Compile Include="Interfaces\IDynamicModelElement.cs" />

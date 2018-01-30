@@ -1,5 +1,5 @@
-﻿using System;
-using M4Graphs.Core.General;
+﻿using M4Graphs.Core.General;
+using System;
 
 namespace M4Graphs.Core.DrawableModelElements
 {

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using M4Graphs.Core.General;
+using M4Graphs.Core.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using M4Graphs.Core.General;
-using M4Graphs.Core.Interfaces;
 
 namespace M4Graphs.Wpf.Components
 {

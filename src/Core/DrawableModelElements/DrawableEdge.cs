@@ -1,6 +1,6 @@
-﻿using System;
+﻿using M4Graphs.Core.General;
+using System;
 using System.Collections.Generic;
-using M4Graphs.Core.General;
 
 namespace M4Graphs.Core.DrawableModelElements
 {

@@ -15,9 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{84503D01-4EB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{389B2919-9BBD-4D09-B076-42154CA54B67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4Graphs.Generators", "src\Generators\M4Graphs.Generators.csproj", "{378EAD75-DB8D-4A1E-8B1A-9D274E190D5E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4Graphs.Generating", "src\Generating\M4Graphs.Generating.csproj", "{378EAD75-DB8D-4A1E-8B1A-9D274E190D5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4Graphs.Parsers", "src\Parsers\M4Graphs.Parsers.csproj", "{99369CCE-34C6-4CB8-B183-49AA36C8C323}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4Graphs.Parsing", "src\Parsing\M4Graphs.Parsing.csproj", "{99369CCE-34C6-4CB8-B183-49AA36C8C323}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

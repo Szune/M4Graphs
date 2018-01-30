@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4Graphs.Core.General
 {
@@ -14,11 +10,6 @@ namespace M4Graphs.Core.General
         /// <summary>
         /// Requires <typeparamref name="TType"/> to implement <see cref="IComparable{T}"/>
         /// </summary>
-        /// <typeparam name="TType"></typeparam>
-        /// <param name="actual"></param>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <returns></returns>
         public static TType Clamp<TType>(this TType actual, TType min, TType max) where TType : IComparable<TType>
         {
             if (actual.CompareTo(max) > 0)
