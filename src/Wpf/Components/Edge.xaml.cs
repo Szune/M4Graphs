@@ -16,7 +16,6 @@ namespace M4Graphs.Wpf.Components
     public partial class Edge : UserControl, IDynamicModelElement
     {
         private Brush ColorNormal = Brushes.Black;
-        private Brush ColorReset = Brushes.Black;
 
         public string Id { get; private set; }
         public ElementStates States { get; private set; } = ElementStates.Normal;
@@ -30,7 +29,7 @@ namespace M4Graphs.Wpf.Components
             Right = 2
         }
 
-        public List<ExecutingElementMethodError> Errors = new List<ExecutingElementMethodError>();
+        public List<ExecutingElementMethodError> Errors { get; } = new List<ExecutingElementMethodError>();
 
         private Direction ArrowDirection;
 

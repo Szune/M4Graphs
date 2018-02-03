@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace M4Graphs.Core.General
 {
+    /// <inheritdoc />
     /// <summary>
     /// A class representing a point in a model.
     /// </summary>
-    public class PathPoint : IComparable<PathPoint>
+    public class PathPoint : IEquatable<PathPoint>
     {
         /// <summary>
         /// Returns a new point with <see cref="X"/> and <see cref="Y"/> values set to zero.
@@ -41,18 +43,6 @@ namespace M4Graphs.Core.General
             Y = y;
         }
 
-        /// <summary>
-        /// Compares the point to another point.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public int CompareTo(PathPoint other)
-        {
-            // TODO: do floating point comparison
-            if (X > other.X && Y > other.Y)
-                return 1;
-            return (X == other.X && Y == other.Y) ? 0 : -1;
-        }
 
         /// <summary>
         /// Returns a string that represents the current object.
@@ -61,6 +51,37 @@ namespace M4Graphs.Core.General
         public override string ToString()
         {
             return $"{X}, {Y}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as PathPoint);
+        }
+
+        public virtual bool Equals(PathPoint other)
+        {
+            const double tolerance = 0.01;
+            return other != null &&
+                   Math.Abs(X - other.X) < tolerance &&
+                   Math.Abs(Y - other.Y) < tolerance;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1861411795;
+            hashCode = hashCode * -1521134295 + X.GetHashCode();
+            hashCode = hashCode * -1521134295 + Y.GetHashCode();
+            return hashCode;
+        }
+
+        public static bool operator ==(PathPoint point1, PathPoint point2)
+        {
+            return EqualityComparer<PathPoint>.Default.Equals(point1, point2);
+        }
+
+        public static bool operator !=(PathPoint point1, PathPoint point2)
+        {
+            return !(point1 == point2);
         }
     }
 }

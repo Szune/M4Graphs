@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace M4Graphs.Parsers
 {
-    public sealed class ModelParser
+    public static class ModelParser
     {
         public static ModelParser<GraphmlParser> Graphml => new ModelParser<GraphmlParser>();
     }
@@ -13,8 +13,8 @@ namespace M4Graphs.Parsers
     /// </summary>
     public class ModelParser<TModelParser> where TModelParser : IModelParser
     {
-        private Stack<Action<TModelParser>> _buildJobs = new Stack<Action<TModelParser>>();
-        private TModelParser _reader;
+        private readonly Stack<Action<TModelParser>> _buildJobs = new Stack<Action<TModelParser>>();
+        private readonly TModelParser _reader;
 
         /// <summary>
         /// Initializes a new instance.
@@ -26,29 +26,29 @@ namespace M4Graphs.Parsers
 
         public ModelParser<TModelParser> Offset(int xOffset, int yOffset)
         {
-            Action<TModelParser> setOffset = (r) => r.SetOffset(xOffset, yOffset);
-            _buildJobs.Push(setOffset);
+            void SetOffset(TModelParser r) => r.SetOffset(xOffset, yOffset);
+            _buildJobs.Push(SetOffset);
             return this;
         }
 
         public ModelParser<TModelParser> FromFile(string filePath)
         {
-            Action<TModelParser> setFilePath = (r) => r.SetFilePath(filePath);
-            _buildJobs.Push(setFilePath);
+            void SetFilePath(TModelParser r) => r.SetFilePath(filePath);
+            _buildJobs.Push(SetFilePath);
             return this;
         }
 
         public ModelParser<TModelParser> FromString(string modelString)
         {
-            Action<TModelParser> setGraphmlString = (r) => r.SetModelString(modelString);
-            _buildJobs.Push(setGraphmlString);
+            void SetGraphmlString(TModelParser r) => r.SetModelString(modelString);
+            _buildJobs.Push(SetGraphmlString);
             return this;
         }
 
         public ModelParser<TModelParser> NoCache()
         {
-            Action<TModelParser> disableFileCaching = (r) => r.DisableFileCaching();
-            _buildJobs.Push(disableFileCaching);
+            void DisableFileCaching(TModelParser r) => r.DisableFileCaching();
+            _buildJobs.Push(DisableFileCaching);
             return this;
         }
 

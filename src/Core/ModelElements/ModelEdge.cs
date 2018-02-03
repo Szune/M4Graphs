@@ -90,8 +90,7 @@ namespace M4Graphs.Core.ModelElements
         /// <param name="y"></param>
         public void SetPosition(int x, int y)
         {
-            Position.X = x;
-            Position.Y = y;
+            Position.Update(x, y);
         }
 
         /// <summary>

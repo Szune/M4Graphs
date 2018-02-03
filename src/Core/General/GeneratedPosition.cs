@@ -11,12 +11,12 @@ namespace M4Graphs.Core.General
         /// <summary>
         /// Returns the x-coordinate.
         /// </summary>
-        public int X;
+        public int X { get; private set; }
 
         /// <summary>
         /// Returns the y-coordinate.
         /// </summary>
-        public int Y;
+        public int Y { get; private set; }
 
         /// <summary>
         /// Initializes a new instance.
@@ -37,12 +37,18 @@ namespace M4Graphs.Core.General
             Y = y;
         }
 
+        public void Update(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
         public override bool Equals(object obj)
         {
             return Equals(obj as GeneratedPosition);
         }
 
-        public bool Equals(GeneratedPosition other)
+        public virtual bool Equals(GeneratedPosition other)
         {
             return other != null &&
                    X == other.X &&

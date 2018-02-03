@@ -10,15 +10,15 @@ namespace M4Graphs.Core.General
         /// <summary>
         /// Returns the element's identifier.
         /// </summary>
-        public string ElementId;
+        public string ElementId { get; }
         /// <summary>
         /// Returns the error message.
         /// </summary>
-        public string Message;
+        public string Message { get; }
         /// <summary>
         /// Returns the associated <see cref="Exception"/>, if any.
         /// </summary>
-        public Exception ThrownException;
+        public Exception ThrownException { get; }
         /// <summary>
         /// Initializes a new instance.
         /// </summary>

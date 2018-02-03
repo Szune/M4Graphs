@@ -15,9 +15,12 @@ namespace M4Graphs.Core
         private double _hitsTotal;
 
         /// <summary>
-        /// Returns a list of element id:s that have been reached so far.
+        /// Returns a list of element ids that have been visited so far.
         /// </summary>
-        public List<string> Elements => ElementHits.Select(kvp => kvp.Key).ToList();
+        public List<string> GetElements()
+        {
+            return ElementHits.Select(kvp => kvp.Key).ToList();
+        }
 
         /// <summary>
         /// Returns the specified element's current heat.

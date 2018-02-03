@@ -6,11 +6,16 @@ using M4Graphs.Wpf.Components;
 using M4Graphs.Wpf.Filtering;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
+using Color = System.Windows.Media.Color;
+using Point = System.Windows.Point;
 
 namespace M4Graphs.Wpf
 {
@@ -135,17 +140,17 @@ namespace M4Graphs.Wpf
                 DrawEdge(edge.Value, loadedModel);
 
             foreach (var node in loadedModel.Nodes)
-                DrawNode(node.Value, loadedModel);
+                DrawNode(node.Value);
         }
 
-        private void DrawNode(IDrawableNode node, DrawableElementCollection collection)
+        private void DrawNode(IDrawableNode node)
         {
             // TODO: refactor this method
             if(node.IsLoaded)
             {
                 var newNode = new Node(node.Id, node.Text, node.X, node.Y, node.Width, node.Height);
                 AddNode(newNode);
-                // no fun allowed -> newNode.BeginAnimation(HeightProperty, new DoubleAnimation(node.Y, node.Height + node.Y, TimeSpan.FromSeconds(2)));
+                // no fun allowed -> newNode.BeginAnimation(HeightProperty, new DoubleAnimation(node.Y, node.Height + node.Y, TimeSpan.FromSeconds(2)))
                 return;
             }
             var x = node.X + RandVal;
@@ -325,7 +330,7 @@ namespace M4Graphs.Wpf
 
         private void UpdateHeat(string idToExempt)
         {
-            var elements = _heatMap.Elements;
+            var elements = _heatMap.GetElements();
             foreach (var id in elements)
             {
                 if (id.Equals(idToExempt, StringComparison.InvariantCultureIgnoreCase)) continue;

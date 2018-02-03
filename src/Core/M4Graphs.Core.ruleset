@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="SonarQube - M4Graphs Sonar way" ToolsVersion="15.0">
+  <Include Path="..\..\sonarqube\m4graphscsharp.ruleset" Action="Default" />
+</RuleSet>

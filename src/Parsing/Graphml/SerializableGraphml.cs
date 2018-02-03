@@ -334,7 +334,7 @@ namespace M4Graphs.Parsers.Graphml
         /// Text content of NodeLabel.
         /// </summary>
         [XmlText]
-        public string Text;
+        public string Text { get; set; }
 
         /// <summary>
         /// LabelModel element.
@@ -586,7 +586,7 @@ namespace M4Graphs.Parsers.Graphml
         /// Text content of EdgeLabel.
         /// </summary>
         [XmlText]
-        public string Text;
+        public string Text { get; set; }
 
         /// <summary>
         /// LabelModel element.

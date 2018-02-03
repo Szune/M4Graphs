@@ -7,7 +7,7 @@ namespace M4Graphs.Generators
     /// <summary>
     /// Builder for <see cref="IModelGenerator"/>s.
     /// </summary>
-    public sealed class ModelGenerator
+    public static class ModelGenerator
     {
         public static ModelGenerator<DefaultModelGenerator> Default => new ModelGenerator<DefaultModelGenerator>();
     }
@@ -17,8 +17,8 @@ namespace M4Graphs.Generators
     /// </summary>
     public class ModelGenerator<TModelGenerator> where TModelGenerator : IModelGenerator
     {
-        private Stack<Action<TModelGenerator>> _buildJobs = new Stack<Action<TModelGenerator>>();
-        private TModelGenerator _generator;
+        private readonly Stack<Action<TModelGenerator>> _buildJobs = new Stack<Action<TModelGenerator>>();
+        private readonly TModelGenerator _generator;
 
         /// <summary>
         /// Initializes a new instance.

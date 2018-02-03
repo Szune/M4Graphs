@@ -18,10 +18,10 @@ namespace M4Graphs.Parsers.Graphml.EdgeLabels
         /// For now, only works with
         /// Placement = "Free: Anywhere", Preferred Placement = "Anywhere Horizontal" on edge labels.
         /// </summary>
-        /// <param name="firstEdgePointX"></param>
-        /// <param name="firstEdgePointY"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         /// <returns></returns>
-        public PathPoint GetActualPosition(double firstEdgePointX, double firstEdgePointY)
+        public PathPoint GetActualPosition(double x, double y)
         {
             /* For: Placement = "Free: Anywhere", Preferred Placement = "Anywhere Horizontal"
              * Begin at: The first x and y coordinates of the edge's first point,
@@ -29,7 +29,7 @@ namespace M4Graphs.Parsers.Graphml.EdgeLabels
              * From there: Simply add the x and y coordinates from the graphml (FileX and FileY)
              */
 
-            return new PathPoint(firstEdgePointX + FileX, firstEdgePointY + FileY);
+            return new PathPoint(x + FileX, y + FileY);
         }
     }
 }

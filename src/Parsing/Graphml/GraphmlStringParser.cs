@@ -34,38 +34,16 @@ namespace M4Graphs.Parsers.Graphml
             GraphmlRoot root;
             using (var reader = new StringReader(graphml))
             {
-                root = (GraphmlRoot)serializer.Deserialize(reader);
+                root = (GraphmlRoot) serializer.Deserialize(reader);
             }
 
             var collection = new DrawableElementCollection();
 
-            foreach(var node in root.Graph.Nodes)
-            {
-                foreach(var data in node.Data)
-                {
-                    if (AreAllNull(data?.GenericNode, data?.PolyLineEdge, data?.ShapeNode)) continue;
+            foreach (var node in root.Graph.Nodes)
+                AddNode(collection, node);
 
-                    if (data.GenericNode != null)
-                        collection.Add(GetGenericNode(node, data.GenericNode));
-                    else if (data.ShapeNode != null)
-                        collection.Add(GetShapeNode(node, data.ShapeNode));
-                    else
-                        throw new GraphmlElementFormatException($"Node with id '{node.Id}' is of an unknown type. Known types: ShapeNode, GenericNode");
-                }
-            }
-
-            foreach(var edge in root.Graph.Edges)
-            {
-                foreach (var data in edge.Data)
-                {
-                    if (AreAllNull(data?.GenericNode, data?.PolyLineEdge, data?.ShapeNode)) continue;
-
-                    if (data.PolyLineEdge != null)
-                        collection.Add(GetPolyLineEdge(edge, data.PolyLineEdge));
-                    else
-                        throw new GraphmlElementFormatException($"Edge with id '{edge.Id}' is of an unknown type. Known types: PolyLineEdge");
-                }
-            }
+            foreach (var edge in root.Graph.Edges)
+                AddEdge(collection, edge);
 
             var lowestX = -collection.Nodes.Min(e => e.Value.X); // let's try to pull everything to the left border
             var lowestY = -collection.Nodes.Min(e => e.Value.Y);
@@ -83,12 +61,38 @@ namespace M4Graphs.Parsers.Graphml
             {
                 edge.Value.SetPosition(edge.Value.X + lowestX + offsetX, edge.Value.Y + lowestY + offsetY);
                 foreach(var point in edge.Value.Points)
-                {
                     point.SetPosition(point.X + lowestX + offsetX, point.Y + lowestY + offsetY);
-                }
             }
 
             return collection;
+        }
+
+        private static void AddEdge(DrawableElementCollection collection, GraphmlEdge edge)
+        {
+            foreach (var data in edge.Data)
+            {
+                if (data?.PolyLineEdge == null) continue;
+
+                if (data.PolyLineEdge != null)
+                    collection.Add(GetPolyLineEdge(edge, data.PolyLineEdge));
+                else
+                    throw new GraphmlElementFormatException($"Edge with id '{edge.Id}' is of an unknown type. Known types: PolyLineEdge");
+            }
+        }
+
+        private static void AddNode(DrawableElementCollection collection, GraphmlNode node)
+        {
+            foreach (var data in node.Data)
+            {
+                if (AreAllNull(data?.GenericNode, data?.ShapeNode)) continue;
+
+                if (data?.GenericNode != null)
+                    collection.Add(GetGenericNode(node, data.GenericNode));
+                else if (data?.ShapeNode != null)
+                    collection.Add(GetShapeNode(node, data.ShapeNode));
+                else
+                    throw new GraphmlElementFormatException($"Node with id '{node.Id}' is of an unknown type. Known types: ShapeNode, GenericNode");
+            }
         }
 
         private static DrawableEdge GetPolyLineEdge(GraphmlEdge edge, GraphmlPolyLineEdge polyLineEdge)
@@ -114,9 +118,7 @@ namespace M4Graphs.Parsers.Graphml
 
         private static bool AreAllNull(params object[] objects)
         {
-            foreach (var obj in objects)
-                if (obj != null) return false;
-            return true;
+            return objects.All(obj => obj == null);
         }
     }
 }

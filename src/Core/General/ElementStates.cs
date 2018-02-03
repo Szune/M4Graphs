@@ -15,16 +15,17 @@ namespace M4Graphs.Core.General
     {
         public static ElementStates AddFlag(this ElementStates states, ElementStates flag)
         {
-            if(!states.HasFlag(flag)) // only add the flag if states doesn't already have it
-                return states |= flag; // adds flag
-            return states;
+            if (states.HasFlag(flag)) return states;
+            states |= flag; // adds flag
+            return states; 
+
         }
 
         public static ElementStates RemoveFlag(this ElementStates states, ElementStates flag)
         {
-            if(states.HasFlag(flag)) // only remove the flag if states actually has it
-                return states &= ~flag; // removes flag
-            return states;
+            if (!states.HasFlag(flag)) return states; // only remove the flag if states actually has it
+            states &= ~flag; // removes flag
+            return states; 
         }
     }
 }

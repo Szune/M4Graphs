@@ -13,7 +13,7 @@ namespace M4Graphs.Generators
     public class DefaultModelGenerator : IModel, IModelGenerator
     {
         private const string CLEARED_NODE = "CLEARED_NODE";
-        public Margin Margins;
+        public Margin Margins { get; private set; }
 
         public ModelNode StartNode;
         public readonly Dictionary<string, ModelNode> Nodes = new Dictionary<string, ModelNode>();
@@ -142,11 +142,7 @@ namespace M4Graphs.Generators
             var nodes = Nodes.Select(node => node.Value.ToGeneratedDrawable(Margins.X, Margins.Y)).ToDictionary(node => node.Id);
             var edges = Edges.Select(edge => edge.Value.ToGeneratedDrawable(Margins.X, Margins.Y)).ToDictionary(edge => edge.Id);
 
-            var collection = new DrawableElementCollection
-            {
-                Nodes = nodes,
-                Edges = edges
-            };
+            var collection = new DrawableElementCollection(nodes, edges);
             return collection;
         }
 

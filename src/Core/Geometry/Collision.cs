@@ -12,8 +12,8 @@ namespace M4Graphs.Core.Geometry
         public static PathPoint GetPointOfEdgeCollision(DrawableNode collidingNode, PathPoint nextLastPoint)
         {
             // starting point of the new position
-            var newX = collidingNode.CenterX;
-            var newY = collidingNode.CenterY;
+            var collisionPointX = collidingNode.CenterX;
+            var collisionPointY = collidingNode.CenterY;
 
 
             var yPrecision = (collidingNode.Height / 2);
@@ -29,50 +29,39 @@ namespace M4Graphs.Core.Geometry
             var nearbyCathetus = collidingNode.Height / 2;
             var opposingCathetus = nearbyCathetus * Math.Tan(angle);
 
-            if (Math.Abs(collidingNode.CenterY - nextLastPoint.Y) > yPrecision)
-            {
-                // if the last point of the edge isn't on the same y-level,
-                // aim for the center of the target node
-                if (collidingNode.CenterY >= nextLastPoint.Y)
-                {
-                    newY -= nearbyCathetus;
-                    if (collidingNode.CenterX >= nextLastPoint.X)
-                    {
-                        newX += opposingCathetus;
-                    }
-                    else
-                    {
-                        newX -= opposingCathetus;
-                    }
-                }
-                else
-                {
-                    newY += nearbyCathetus;
-                    if (collidingNode.CenterX >= nextLastPoint.X)
-                    {
-                        newX -= opposingCathetus;
-                    }
-                    else
-                    {
-                        newX += opposingCathetus;
-                    }
-                }
-            }
-            else
+            if (Math.Abs(collidingNode.CenterY - nextLastPoint.Y) <= yPrecision)
             {
                 // if the last point of the edge is on the same y-level, we don't care about the angle
                 // and instead just add or subtract half of the target node's width
                 if (collidingNode.CenterX >= nextLastPoint.X)
-                {
-                    newX -= xPrecision;
-                }
+                    collisionPointX -= xPrecision;
                 else
-                {
-                    newX += xPrecision;
-                }
+                    collisionPointX += xPrecision;
+                return new PathPoint(
+                    collisionPointX.Clamp(collidingNode.X, collidingNode.X + collidingNode.Width),
+                    collisionPointY.Clamp(collidingNode.Y, collidingNode.Y + collidingNode.Height));
             }
 
-            return new PathPoint(newX.Clamp(collidingNode.X, collidingNode.X + collidingNode.Width), newY.Clamp(collidingNode.Y, collidingNode.Y + collidingNode.Height));
+
+            // if the last point of the edge isn't on the same y-level,
+            // aim for the center of the target node
+            if (collidingNode.CenterY >= nextLastPoint.Y)
+            {
+                collisionPointY -= nearbyCathetus; // node is _below_ the edge's current last point
+                collisionPointX += collidingNode.CenterX >= nextLastPoint.X
+                    ? opposingCathetus // node is to the _right_ of the edge's current last point
+                    : -opposingCathetus; // node is to the _left_ of the edge's current last point
+            }
+            else
+            {
+                collisionPointY += nearbyCathetus; // node is _above_ the edge's current last point
+                collisionPointX += collidingNode.CenterX >= nextLastPoint.X
+                    ? -opposingCathetus // node is to the _right_ of the edge's current last point
+                    : opposingCathetus; // node is to the _left_ of the edge's current last point
+            }
+            return new PathPoint(
+                collisionPointX.Clamp(collidingNode.X, collidingNode.X + collidingNode.Width),
+                collisionPointY.Clamp(collidingNode.Y, collidingNode.Y + collidingNode.Height));
         }
     }
 }

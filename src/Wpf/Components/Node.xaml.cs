@@ -16,7 +16,6 @@ namespace M4Graphs.Wpf.Components
     public partial class Node : UserControl, IDynamicModelElement
     {
         private Brush ColorNormal = Brushes.DarkGoldenrod;
-        private Brush ColorReset = Brushes.DarkGoldenrod;
 
         public string Id { get; private set; }
         public ElementStates States { get; private set; } = ElementStates.Normal;

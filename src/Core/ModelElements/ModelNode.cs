@@ -98,8 +98,7 @@ namespace M4Graphs.Core.ModelElements
         /// <param name="y"></param>
         public void SetPosition(int x, int y)
         {
-            Position.X = x;
-            Position.Y = y;
+            Position.Update(x, y);
         }
 
         /// <summary>
@@ -111,41 +110,6 @@ namespace M4Graphs.Core.ModelElements
             return $"Node ({Id}): {Text}";
         }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="ModelNode"/> is equal to the current node.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(ModelNode other)
-        {
-            if (other == null) return false;
-            if (other.Id != Id) return false;
-            if (other.Text != Text) return false;
-            if (other.Position.X != Position.X) return false;
-            if (other.Position.Y != Position.Y) return false;
-            return true;
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            if (obj is ModelNode node)
-                return Equals(node);
-            return false;
-        }
-
-        /// <summary>
-        /// Returns the node's hash code.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return new { Id, Text, Position.X, Position.Y }.GetHashCode();
-        }
 
         /// <summary>
         /// Converts the <see cref="ModelNode"/> to a new <see cref="DrawableNode"/>.
@@ -156,6 +120,46 @@ namespace M4Graphs.Core.ModelElements
         public IDrawableNode ToGeneratedDrawable(int xDistance, int yDistance)
         {
             return new DrawableNode(Id, Text, Position.X * xDistance, Position.Y * yDistance);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ModelNode);
+        }
+
+        public virtual bool Equals(ModelNode other)
+        {
+            return other != null &&
+                   Id == other.Id &&
+                   Text == other.Text &&
+                   EqualityComparer<ModelNode>.Default.Equals(ParentNode, other.ParentNode) &&
+                   EqualityComparer<List<ModelEdge>>.Default.Equals(ParentEdges, other.ParentEdges) &&
+                   EqualityComparer<List<ModelEdge>>.Default.Equals(ChildEdges, other.ChildEdges) &&
+                   EqualityComparer<GeneratedPosition>.Default.Equals(Position, other.Position) &&
+                   HasChild == other.HasChild;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1086983834;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Id);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Text);
+            hashCode = hashCode * -1521134295 + EqualityComparer<ModelNode>.Default.GetHashCode(ParentNode);
+            hashCode = hashCode * -1521134295 + EqualityComparer<List<ModelEdge>>.Default.GetHashCode(ParentEdges);
+            hashCode = hashCode * -1521134295 + EqualityComparer<List<ModelEdge>>.Default.GetHashCode(ChildEdges);
+            hashCode = hashCode * -1521134295 + EqualityComparer<GeneratedPosition>.Default.GetHashCode(Position);
+            hashCode = hashCode * -1521134295 + HasChild.GetHashCode();
+            return hashCode;
+        }
+
+        public static bool operator ==(ModelNode node1, ModelNode node2)
+        {
+            return EqualityComparer<ModelNode>.Default.Equals(node1, node2);
+        }
+
+        public static bool operator !=(ModelNode node1, ModelNode node2)
+        {
+            return !(node1 == node2);
         }
     }
 }

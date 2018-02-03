@@ -1,0 +1,14 @@
+{
+  "ServerUri": "https://sonarcloud.io/",
+  "Organization": {
+    "Key": "szune-github",
+    "Name": "Erik Iwarson"
+  },
+  "ProjectKey": "M4Graphs",
+  "Profiles": {
+    "CSharp": {
+      "ProfileKey": "AWFOTzzHg2wape3yPHEd",
+      "ProfileTimestamp": "2017-12-20T09:41:25+01:00"
+    }
+  }
+}
