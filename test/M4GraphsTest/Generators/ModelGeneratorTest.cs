@@ -37,13 +37,6 @@ namespace M4GraphsTest.Core
         }
 
         [TestMethod]
-        public void Model_SetStartNode_Should_Assume_StartNode_If_There_Is_No_StartNode_And_A_Node_With_No_Parent_Edge_Was_Added()
-        {
-            model.SetStartNode(node);
-            model.StartNode.Should().Be(node);
-        }
-
-        [TestMethod]
         public void Model_AddStartNode_Should_Set_Level_X_To_Zero_If_It_Has_No_Parent_Edge_And_There_Are_No_Other_Nodes_At_That_Level()
         {
             model.AddStartNode(node);

@@ -1,5 +1,4 @@
 ﻿using M4Graphs.Parsers;
-using M4Graphs.Parsers.Graphml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
@@ -13,6 +12,7 @@ namespace M4GraphsTest.Core
         {
             var text = new StreamReader(@"E:\exempel.graphml").ReadToEnd();
             var tree = ModelParser.Graphml.FromString(text).Build().GetElements();
+            tree.Clear();
         }
     }
 }

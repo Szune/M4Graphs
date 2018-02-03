@@ -11,7 +11,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 
 namespace M4Graphs.Wpf
 {
@@ -20,36 +19,37 @@ namespace M4Graphs.Wpf
     /// </summary>
     public partial class GraphModel : UserControl, IDynamicGraphModel
     {
-        //private Dictionary<int, SolidColorBrush> brushForEdgeId = new Dictionary<int, SolidColorBrush>();
-        public IModel Model; // TODO: make private? TODO: more thinking
-        private int NodeWidth = 50;
-        private int NodeHeight = 20;
-        private int _yDistance = 110;
+        private IModel _model;
+        private int NodeWidth { get; } = 50;
+        private int NodeHeight { get; } = 20;
+        private readonly int _yDistance = 110;
         private int _xDistance = 60;
         
-        private int RandVal => Measurements.GetRandom(1, 10);
+        private static int RandVal => Measurements.GetRandom(1, 10);
 
-        private Dictionary<string, IDynamicModelElement> _elements = new Dictionary<string, IDynamicModelElement>();
+        private readonly Dictionary<string, IDynamicModelElement> _elements = new Dictionary<string, IDynamicModelElement>();
 
         private IDynamicModelElement _currentlyActivated;
 
-        private HeatMap _heatMap = new HeatMap();
-        private Filters _filters = new Filters();
+        private readonly HeatMap _heatMap = new HeatMap();
+        private readonly Filters _filters = new Filters();
 
-        public static DependencyProperty ModelBackgroundProperty = DependencyProperty.Register("ModelBackground", typeof(Brush), typeof(GraphModel), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty ModelBackgroundProperty = DependencyProperty.Register("ModelBackground", typeof(Brush), typeof(GraphModel), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, FrameworkPropertyMetadataOptions.AffectsRender));
         public Brush ModelBackground
         {
-            get { return (Brush)GetValue(ModelBackgroundProperty); }
+            get => (Brush)GetValue(ModelBackgroundProperty);
             set { SetValue(ModelBackgroundProperty, value);
                 ColorManager.FilteredColor = value;
             }
         }
 
+        public IModel Model => _model;
+
         /// <summary>
         /// 0: 25%, 1: 50%, 2: 75%, 3: 100%, 4: 150%, 5: 200%
         /// </summary>
-        private LevelList<double> _zoomStages = new LevelList<double>(3) {0.25, 0.5, 0.75, 1, 1.5, 2 }; // 1 = 100%, 2 = 200%, 0.5 = 50%, etc
-        private MatrixTransform _originalTransform;
+        private readonly LevelList<double> _zoomStages = new LevelList<double>(3) {0.25, 0.5, 0.75, 1, 1.5, 2 }; // 1 = 100%, 2 = 200%, 0.5 = 50%, etc
+        private readonly MatrixTransform _originalTransform;
         private MatrixTransform _currentTransform;
 
         private double _gridActualWidth;
@@ -69,8 +69,6 @@ namespace M4Graphs.Wpf
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="xDistance"></param>
-        /// <param name="yDistance"></param>
         public GraphModel(int xDistance, int yDistance) : this()
         {
             _xDistance = xDistance;
@@ -80,10 +78,6 @@ namespace M4Graphs.Wpf
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="nodeWidth"></param>
-        /// <param name="nodeHeight"></param>
-        /// <param name="xDistance"></param>
-        /// <param name="yDistance"></param>
         public GraphModel(int nodeWidth, int nodeHeight, int xDistance, int yDistance) : this(xDistance, yDistance)
         {
             NodeWidth = nodeWidth;
@@ -93,23 +87,18 @@ namespace M4Graphs.Wpf
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="background"></param>
-        /// <param name="nodeWidth"></param>
-        /// <param name="nodeHeight"></param>
-        /// <param name="xDistance"></param>
-        /// <param name="yDistance"></param>
         public GraphModel(Brush background, int nodeWidth, int nodeHeight, int xDistance, int yDistance) : this(nodeWidth, nodeHeight, xDistance, yDistance)
         {
             Main.Background = background;
         }
 
         /// <summary>
-        /// Sets the associated <see cref="Model"/> used for drawing.
+        /// Sets the associated <see cref="_model"/> used for drawing.
         /// </summary>
         /// <param name="model"></param>
         public void Set(IModel model)
         {
-            Model = model;
+            _model = model;
         }
 
         /// <summary>
@@ -129,8 +118,8 @@ namespace M4Graphs.Wpf
         {
             // reset board before drawing
             Reset();
-            //var elements = Model.GetElements(_xDistance, _yDistance);
-            var elements = Model.GetElements();
+            //var elements = _model.GetElements(_xDistance, _yDistance);
+            var elements = _model.GetElements();
             Draw(elements);
         }
 
@@ -176,9 +165,7 @@ namespace M4Graphs.Wpf
 
         private void DrawEdge(IDrawableEdge edge, DrawableElementCollection collection)
         {
-            // TODO: refactor this method into classes
-            // and let them figure this stuff out
-
+            // TODO: refactor this method
 
             if (edge.IsLoaded)
             {
@@ -189,12 +176,14 @@ namespace M4Graphs.Wpf
                 PathPoint outside;
                 if (loadedPoints.Count > 1)
                 {
+                    // if there's more than 1 point, to be able to get the correct angle for the last point,
+                    // we need to use the current last point
                     var nextLast = loadedPoints.Last();
-                    outside = target.Collide(new PathPoint(nextLast.X, nextLast.Y));
+                    outside = target.GetPointOfEdgeCollision(new PathPoint(nextLast.X, nextLast.Y));
                 }
                 else
                 {
-                    outside = target.Collide(new PathPoint(source.CenterX, source.CenterY));
+                    outside = target.GetPointOfEdgeCollision(new PathPoint(source.CenterX, source.CenterY));
                 }
                 loadedPoints.Add(outside.ToPoint());
                  
@@ -202,7 +191,7 @@ namespace M4Graphs.Wpf
                 if (edge.Label != null)
                 {
                     var secondPoint = loadedPoints[1];
-                    var firstPoint = source.Collide(new PathPoint(secondPoint.X, secondPoint.Y));
+                    var firstPoint = source.GetPointOfEdgeCollision(new PathPoint(secondPoint.X, secondPoint.Y));
                     // get first x and y coordinates outside of source node
                     var labelPoint = edge.Label.GetActualPosition(firstPoint.X, firstPoint.Y);
                     newLine = new Edge(edge.Id, edge.Text, loadedPoints, labelPoint.ToPoint());

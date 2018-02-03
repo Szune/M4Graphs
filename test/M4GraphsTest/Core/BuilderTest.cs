@@ -21,6 +21,7 @@ namespace M4GraphsTest.Core
         public void ModelReaderBuilder_Order_Of_Jobs_Should_Not_Matter()
         {
             var reader = ModelParser.Graphml.Offset(5, 6).NoCache().Build();
+            reader.GetElements();
         }
     }
 }

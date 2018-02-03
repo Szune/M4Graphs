@@ -19,16 +19,16 @@ namespace M4Graphs.Wpf.Components
         private Brush ColorReset = Brushes.DarkGoldenrod;
 
         public string Id { get; private set; }
-        public ElementState State { get; private set; } = ElementState.Normal;
+        public ElementStates States { get; private set; } = ElementStates.Normal;
         public bool IsVisited { get; private set; }
 
         public bool HasErrors => Errors.Any();
 
-        public List<ExecutingElementMethodError> Errors = new List<ExecutingElementMethodError>();
+        public List<ExecutingElementMethodError> Errors { get; } = new List<ExecutingElementMethodError>();
 
         private double _lastHeat;
 
-        public static DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(PathPoint), typeof(Node), new FrameworkPropertyMetadata(PathPoint.Zero, FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(PathPoint), typeof(Node), new FrameworkPropertyMetadata(PathPoint.Zero, FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsRender));
 
         public PathPoint Position
         {
@@ -70,13 +70,13 @@ Position: {NodeBackground.Margin.Left},{NodeBackground.Margin.Top}");
         public void Activate()
         {
             IsVisited = true;
-            State = State.AddFlag(ElementState.Activated);
+            States = States.AddFlag(ElementStates.Activated);
             UpdateColor();
         }
 
         public void Deactivate()
         {
-            State = State.RemoveFlag(ElementState.Activated);
+            States = States.RemoveFlag(ElementStates.Activated);
             UpdateColor();
         }
 
@@ -93,13 +93,13 @@ Position: {NodeBackground.Margin.Left},{NodeBackground.Margin.Top}");
 
         private void UpdateColor()
         {
-            if (State == ElementState.Normal) // just use normal color
+            if (States == ElementStates.Normal) // just use normal color
                 SetColor(ColorNormal);
             else
             {
-                if (State.HasFlag(ElementState.Activated)) // force activated color
+                if (States.HasFlag(ElementStates.Activated)) // force activated color
                     SetColor(ColorManager.ActivatedColor);
-                else if (State.HasFlag(ElementState.Filtered)) // use filtered color
+                else if (States.HasFlag(ElementStates.Filtered)) // use filtered color
                     SetColor(ColorManager.FilteredColor);
             }
         }
@@ -136,12 +136,12 @@ Position: {NodeBackground.Margin.Left},{NodeBackground.Margin.Top}");
             if (filter.Any(f => f(this)))
             {
                 NodeGrid.Visibility = Visibility.Hidden;
-                State = State.AddFlag(ElementState.Filtered);
+                States = States.AddFlag(ElementStates.Filtered);
             }
             else
             {
                 NodeGrid.Visibility = Visibility.Visible;
-                State = State.RemoveFlag(ElementState.Filtered);
+                States = States.RemoveFlag(ElementStates.Filtered);
             }
             UpdateColor(); // keeping this in case of only wanting to change the color of filtered elements
         }

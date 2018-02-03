@@ -48,13 +48,10 @@ namespace M4Graphs.Core.General
         /// <returns></returns>
         public int CompareTo(PathPoint other)
         {
-            // TODO: change this implementation?
+            // TODO: do floating point comparison
             if (X > other.X && Y > other.Y)
                 return 1;
-            else if (X == other.X && Y == other.Y)
-                return 0;
-            else
-                return -1;
+            return (X == other.X && Y == other.Y) ? 0 : -1;
         }
 
         /// <summary>

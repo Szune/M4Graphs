@@ -20,7 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\M4Graphs.Core.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -48,9 +49,9 @@
     <Compile Include="DrawableModelElements\IDrawableEdge.cs" />
     <Compile Include="DrawableModelElements\IDrawableElement.cs" />
     <Compile Include="DrawableModelElements\IDrawableNode.cs" />
-    <Compile Include="General\ElementState.cs" />
+    <Compile Include="General\ElementStates.cs" />
     <Compile Include="General\IFilter.cs" />
-    <Compile Include="Geometry\Coordinates.cs" />
+    <Compile Include="Geometry\Collision.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="Interfaces\IActivatable.cs" />
     <Compile Include="Interfaces\IDynamicModelElement.cs" />
@@ -66,7 +67,7 @@
     <Compile Include="ModelElements\ModelEdge.cs" />
     <Compile Include="ModelElements\ModelNode.cs" />
     <Compile Include="ModelElements\EdgeNotConnectedException.cs" />
-    <Compile Include="General\PathPoint.cs" />
+    <Compile Include="Geometry\PathPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HeatMap.cs" />
     <Compile Include="ModelElementFactory.cs" />

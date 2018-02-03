@@ -33,7 +33,7 @@ namespace M4Graphs.Wpf.Filtering
         {
             Current = HeatMap.GetFilters();
             if(_hideVisited)
-                Current.Add(new Predicate<IDynamicModelElement>(target => !target.IsVisited));
+                Current.Add((target => !target.IsVisited));
         }
     }
 }

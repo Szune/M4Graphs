@@ -1,12 +1,14 @@
 ﻿using M4Graphs.Core.General;
 using System;
+using M4Graphs.Core.Geometry;
+using System.Collections.Generic;
 
 namespace M4Graphs.Core.DrawableModelElements
 {
     /// <summary>
     /// A node prepared for drawing.
     /// </summary>
-    public class DrawableNode : IDrawableNode, IEquatable<IDrawableElement>
+    public class DrawableNode : IDrawableNode, IEquatable<DrawableNode>
     {
         /// <summary>
         /// Returns the x-coordinate of the node.
@@ -58,7 +60,6 @@ namespace M4Graphs.Core.DrawableModelElements
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="id"></param>
         public DrawableNode(string id)
         {
             Id = id;
@@ -67,10 +68,6 @@ namespace M4Graphs.Core.DrawableModelElements
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="text"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
         public DrawableNode(string id, string text, double x, double y) : this(id)
         {
             Text = text;
@@ -81,13 +78,6 @@ namespace M4Graphs.Core.DrawableModelElements
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="text"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="isLoaded"></param>
         public DrawableNode(string id, string text, double x, double y, double width, double height, bool isLoaded) : this(id, text, x, y)
         {
             Width = width;
@@ -98,46 +88,10 @@ namespace M4Graphs.Core.DrawableModelElements
         /// <summary>
         /// Sets the node's position.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
         public void SetPosition(double x, double y)
         {
             X = x;
             Y = y;
-        }
-
-        /// <summary>
-        /// Determines whether the specified <see cref="IDrawableElement"/> is equal to the current node.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(IDrawableElement other)
-        {
-            if (other == null) return false;
-            if (!(other is DrawableNode)) return false;
-            if (other.Id != Id) return false;
-            return true;
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            if (obj is IDrawableElement drawable)
-                return Equals(drawable);
-            return false;
-        }
-
-        /// <summary>
-        /// Returns the node's hash code.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
         }
 
         /// <summary>
@@ -151,71 +105,58 @@ namespace M4Graphs.Core.DrawableModelElements
             Height = height;
         }
 
-        public PathPoint Collide(PathPoint nextLastPoint)
+        /// <summary>
+        /// Gets the point where the specified edge collides with the node.
+        /// </summary>
+        public PathPoint GetPointOfEdgeCollision(PathPoint nextLastPoint)
         {
-            // TODO: Move this method somewhere else
-            // starting point of the new position
-            var newX = CenterX;
-            var newY = CenterY;
+            return Collision.GetPointOfEdgeCollision(this, nextLastPoint);
+        }
 
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as DrawableNode);
+        }
 
-            var yPrecision = (Height / 2);
-            var xPrecision = (Width / 2);
+        public virtual bool Equals(DrawableNode other)
+        {
+            return other != null &&
+                   X == other.X &&
+                   Y == other.Y &&
+                   Width == other.Width &&
+                   Height == other.Height &&
+                   ParentNodeId == other.ParentNodeId &&
+                   IsLoaded == other.IsLoaded &&
+                   Id == other.Id &&
+                   Text == other.Text &&
+                   CenterX == other.CenterX &&
+                   CenterY == other.CenterY;
+        }
 
-            var x2 = nextLastPoint.X;
-            var y2 = nextLastPoint.Y;
-            var x1 = CenterX;
-            var y1 = CenterY;
-            
-            var vinkel = Math.Acos((y2 - y1) / Math.Sqrt(Math.Pow((y2 - y1), 2) + Math.Pow((x2 - x1), 2)));
+        public override int GetHashCode()
+        {
+            var hashCode = -610834779;
+            hashCode = hashCode * -1521134295 + X.GetHashCode();
+            hashCode = hashCode * -1521134295 + Y.GetHashCode();
+            hashCode = hashCode * -1521134295 + Width.GetHashCode();
+            hashCode = hashCode * -1521134295 + Height.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ParentNodeId);
+            hashCode = hashCode * -1521134295 + IsLoaded.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Id);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Text);
+            hashCode = hashCode * -1521134295 + CenterX.GetHashCode();
+            hashCode = hashCode * -1521134295 + CenterY.GetHashCode();
+            return hashCode;
+        }
 
-            var närliggandeKatet = Height / 2;
-            var motståendeKatet = närliggandeKatet * Math.Tan(vinkel);
+        public static bool operator ==(DrawableNode node1, DrawableNode node2)
+        {
+            return EqualityComparer<DrawableNode>.Default.Equals(node1, node2);
+        }
 
-            if (Math.Abs(CenterY - nextLastPoint.Y) > yPrecision)
-            {
-                // if the last point of the edge isn't on the same y-level,
-                // aim for the center of the target node
-                if (CenterY >= nextLastPoint.Y)
-                {
-                    newY -= närliggandeKatet;
-                    if (CenterX >= nextLastPoint.X)
-                    {
-                        newX += motståendeKatet;
-                    }
-                    else
-                    {
-                        newX -= motståendeKatet;
-                    }
-                }
-                else
-                {
-                    newY += närliggandeKatet;
-                    if (CenterX >= nextLastPoint.X)
-                    {
-                        newX -= motståendeKatet;
-                    }
-                    else
-                    {
-                        newX += motståendeKatet;
-                    }
-                }
-            }
-            else
-            {
-                // if the last point of the edge is on the same y-level, we don't care about the angle
-                // and instead just add or subtract half of the target node's width
-                if (CenterX >= nextLastPoint.X)
-                {
-                    newX -= xPrecision;
-                }
-                else
-                {
-                    newX += xPrecision;
-                }
-            }
-            
-            return new PathPoint(newX.Clamp(X, X + Width), newY.Clamp(Y, Y + Height));
+        public static bool operator !=(DrawableNode node1, DrawableNode node2)
+        {
+            return !(node1 == node2);
         }
     }
 }

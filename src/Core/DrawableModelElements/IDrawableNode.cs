@@ -9,6 +9,6 @@ namespace M4Graphs.Core.DrawableModelElements
         double CenterX { get; }
         double CenterY { get; }
 
-        PathPoint Collide(PathPoint nextLastPoint);
+        PathPoint GetPointOfEdgeCollision(PathPoint nextLastPoint);
     }
 }

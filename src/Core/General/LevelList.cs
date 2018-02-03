@@ -9,7 +9,7 @@ namespace M4Graphs.Core.General
     /// <typeparam name="TType"></typeparam>
     public class LevelList<TType> : IEnumerable<TType>
     {
-        private List<TType> _levels = new List<TType>();
+        private readonly List<TType> _levels = new List<TType>();
 
 
         /// <summary>

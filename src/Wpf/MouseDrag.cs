@@ -76,41 +76,51 @@ namespace M4Graphs.Wpf
 
     public struct MouseDragFinishedEventArgs
     {
-        public Point Start;
-        public Point End;
-        public Point Delta;
-        public Point Change;
-        public bool IsMoved;
+        public Point Start { get; }
+        public Point End { get; }
+        public Point Delta { get; }
+        public Point Change { get; }
+        public bool IsMoved { get; }
 
-        public MouseDragFinishedEventArgs(Point start, Point end, Point delta, Point change)
+        private MouseDragFinishedEventArgs(bool isMoved, Point start, Point end, Point delta, Point change)
         {
             Start = start;
             End = end;
             Delta = delta;
             Change = change;
-            IsMoved = true;
+            IsMoved = isMoved;
         }
 
-        public static MouseDragFinishedEventArgs NoMovement => new MouseDragFinishedEventArgs { IsMoved = false, End = new Point(0, 0), Delta = new Point(0, 0), Start = new Point(0, 0), Change = new Point(0,0) };
+        public MouseDragFinishedEventArgs(Point start, Point end, Point delta, Point change) : this(true, start, end, delta, change)
+        {
+        }
+
+        public static MouseDragFinishedEventArgs NoMovement => new MouseDragFinishedEventArgs(false, new Point(0, 0),
+            new Point(0, 0), new Point(0, 0), new Point(0, 0));
     }
 
     public struct MouseDragMovingEventArgs
     {
-        public Point Start;
-        public Point Current;
-        public Point Delta;
-        public Point Change;
-        public bool IsMoving;
+        public Point Start { get; }
+        public Point Current { get; }
+        public Point Delta { get; }
+        public Point Change { get; }
+        public bool IsMoving { get; }
 
-        public MouseDragMovingEventArgs(Point start, Point current, Point delta, Point change)
+        private MouseDragMovingEventArgs(bool isMoving, Point start, Point current, Point delta, Point change)
         {
+            IsMoving = isMoving;
             Start = start;
             Current = current;
             Delta = delta;
             Change = change;
-            IsMoving = true;
         }
 
-        public static MouseDragMovingEventArgs NotMoving => new MouseDragMovingEventArgs {IsMoving=false, Current=new Point(0,0), Delta = new Point(0,0), Start = new Point(0,0), Change = new Point(0,0) };
+        public MouseDragMovingEventArgs(Point start, Point current, Point delta, Point change) : this(true, start,
+            current, delta, change)
+        {            
+        }
+
+        public static MouseDragMovingEventArgs NotMoving => new MouseDragMovingEventArgs(false,new Point(0,0), new Point(0,0), new Point(0,0), new Point(0,0));
     }
 }

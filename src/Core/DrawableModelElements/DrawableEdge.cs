@@ -7,7 +7,7 @@ namespace M4Graphs.Core.DrawableModelElements
     /// <summary>
     /// An edge prepared for drawing.
     /// </summary>
-    public class DrawableEdge : IDrawableEdge, IEquatable<IDrawableEdge>
+    public class DrawableEdge : IDrawableEdge, IEquatable<DrawableEdge>
     {
         /// <summary>
         /// Returns the x-coordinate of the edge.
@@ -66,10 +66,6 @@ namespace M4Graphs.Core.DrawableModelElements
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="text"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
         public DrawableEdge(string id, string text, double x, double y)
         {
             Id = id;
@@ -81,12 +77,6 @@ namespace M4Graphs.Core.DrawableModelElements
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="text"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="parent"></param>
-        /// <param name="child"></param>
         public DrawableEdge(string id, string text, double x, double y, IDrawableNode parent, IDrawableNode child) : this(id, text, x, y)
         {
             SourceNode = parent;
@@ -96,10 +86,6 @@ namespace M4Graphs.Core.DrawableModelElements
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="text"></param>
-        /// <param name="parent"></param>
-        /// <param name="child"></param>
         public DrawableEdge(string id, string text, IDrawableNode parent, IDrawableNode child)
         {
             Id = id;
@@ -111,12 +97,6 @@ namespace M4Graphs.Core.DrawableModelElements
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="text"></param>
-        /// <param name="sourceId"></param>
-        /// <param name="targetId"></param>
-        /// <param name="points"></param>
-        /// <param name="isLoaded"></param>
         public DrawableEdge(string id, string text, string sourceId, string targetId, List<PathPoint> points, bool isLoaded)
         {
             Id = id;
@@ -130,13 +110,6 @@ namespace M4Graphs.Core.DrawableModelElements
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="text"></param>
-        /// <param name="label"></param>
-        /// <param name="sourceId"></param>
-        /// <param name="targetId"></param>
-        /// <param name="points"></param>
-        /// <param name="isLoaded"></param>
         public DrawableEdge(string id, string text, IEdgeLabel label, string sourceId, string targetId, List<PathPoint> points, bool isLoaded)
         {
             Id = id;
@@ -151,7 +124,6 @@ namespace M4Graphs.Core.DrawableModelElements
         /// <summary>
         /// Sets the edge's source node.
         /// </summary>
-        /// <param name="start"></param>
         public void SetSourceNode(IDrawableNode start)
         {
             SourceNode = start;
@@ -160,7 +132,6 @@ namespace M4Graphs.Core.DrawableModelElements
         /// <summary>
         /// Set's the edge's target node.
         /// </summary>
-        /// <param name="end"></param>
         public void SetTargetNode(IDrawableNode end)
         {
             TargetNode = end;
@@ -169,46 +140,60 @@ namespace M4Graphs.Core.DrawableModelElements
         /// <summary>
         /// Sets the edge's position.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
         public void SetPosition(double x, double y)
         {
             X = x;
             Y = y;
         }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="IDrawableEdge"/> is equal to the current edge.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(IDrawableEdge other)
-        {
-            if (other == null) return false;
-            if (!(other is IDrawableEdge)) return false;
-            if (other.Id != Id) return false;
-            return true;
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (obj is IDrawableEdge drawable)
-                return Equals(drawable);
-            return false;
+            return Equals(obj as DrawableEdge);
         }
 
-        /// <summary>
-        /// Returns the edge's hash code.
-        /// </summary>
-        /// <returns></returns>
+        public virtual bool Equals(DrawableEdge other)
+        {
+            return other != null &&
+                   X == other.X &&
+                   Y == other.Y &&
+                   EqualityComparer<IDrawableNode>.Default.Equals(SourceNode, other.SourceNode) &&
+                   EqualityComparer<IDrawableNode>.Default.Equals(TargetNode, other.TargetNode) &&
+                   Id == other.Id &&
+                   Text == other.Text &&
+                   EqualityComparer<List<PathPoint>>.Default.Equals(Points, other.Points) &&
+                   EqualityComparer<PathPoint>.Default.Equals(LabelPoint, other.LabelPoint) &&
+                   IsLoaded == other.IsLoaded &&
+                   TargetId == other.TargetId &&
+                   SourceId == other.SourceId &&
+                   EqualityComparer<IEdgeLabel>.Default.Equals(Label, other.Label);
+        }
+
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            var hashCode = -1842038537;
+            hashCode = hashCode * -1521134295 + X.GetHashCode();
+            hashCode = hashCode * -1521134295 + Y.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<IDrawableNode>.Default.GetHashCode(SourceNode);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IDrawableNode>.Default.GetHashCode(TargetNode);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Id);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Text);
+            hashCode = hashCode * -1521134295 + EqualityComparer<List<PathPoint>>.Default.GetHashCode(Points);
+            hashCode = hashCode * -1521134295 + EqualityComparer<PathPoint>.Default.GetHashCode(LabelPoint);
+            hashCode = hashCode * -1521134295 + IsLoaded.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(TargetId);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SourceId);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IEdgeLabel>.Default.GetHashCode(Label);
+            return hashCode;
+        }
+
+        public static bool operator ==(DrawableEdge edge1, DrawableEdge edge2)
+        {
+            return EqualityComparer<DrawableEdge>.Default.Equals(edge1, edge2);
+        }
+
+        public static bool operator !=(DrawableEdge edge1, DrawableEdge edge2)
+        {
+            return !(edge1 == edge2);
         }
     }
 }

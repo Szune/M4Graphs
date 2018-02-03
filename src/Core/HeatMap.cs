@@ -11,13 +11,13 @@ namespace M4Graphs.Core
         /// <summary>
         /// key -> string -> elementId, value -> long -> amount of hits
         /// </summary>
-        private Dictionary<string, double> _elementHits = new Dictionary<string, double>();
+        private Dictionary<string, double> ElementHits { get; } = new Dictionary<string, double>();
         private double _hitsTotal;
 
         /// <summary>
         /// Returns a list of element id:s that have been reached so far.
         /// </summary>
-        public List<string> Elements => _elementHits.Select(kvp => kvp.Key).ToList();
+        public List<string> Elements => ElementHits.Select(kvp => kvp.Key).ToList();
 
         /// <summary>
         /// Returns the specified element's current heat.
@@ -26,8 +26,8 @@ namespace M4Graphs.Core
         /// <returns></returns>
         public double GetHeat(string id)
         {
-            if (!_elementHits.ContainsKey(id)) throw new KeyNotFoundException($"The element '{id}' has not yet been added to the heat map.");
-            return (_elementHits[id] / _hitsTotal);
+            if (!ElementHits.ContainsKey(id)) throw new KeyNotFoundException($"The element '{id}' has not yet been added to the heat map.");
+            return (ElementHits[id] / _hitsTotal);
         }
 
         /// <summary>
@@ -36,10 +36,10 @@ namespace M4Graphs.Core
         /// <param name="id">The element's identifier.</param>
         public void AddHeat(string id)
         {
-            if (_elementHits.ContainsKey(id))
-                _elementHits[id] += 1;
+            if (ElementHits.ContainsKey(id))
+                ElementHits[id] += 1;
             else
-                _elementHits[id] = 1;
+                ElementHits[id] = 1;
             _hitsTotal++;
         }
 
@@ -48,7 +48,7 @@ namespace M4Graphs.Core
         /// </summary>
         public void Reset()
         {
-            _elementHits.Clear();
+            ElementHits.Clear();
             _hitsTotal = 0;
         }
     }

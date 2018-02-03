@@ -43,6 +43,6 @@ namespace M4Graphs.Core.Interfaces
         /// <param name="filter"></param>
         void Filter(List<Predicate<IDynamicModelElement>> filter);
 
-        ElementState State { get; }
+        ElementStates States { get; }
     }
 }

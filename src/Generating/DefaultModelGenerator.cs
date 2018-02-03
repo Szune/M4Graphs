@@ -18,7 +18,7 @@ namespace M4Graphs.Generators
         public ModelNode StartNode;
         public readonly Dictionary<string, ModelNode> Nodes = new Dictionary<string, ModelNode>();
         public readonly Dictionary<string, ModelEdge> Edges = new Dictionary<string, ModelEdge>();
-
+        
         /// <summary>
         /// dictionary&lt;y, amount of nodes&gt;
         /// </summary>

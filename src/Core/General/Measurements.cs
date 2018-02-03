@@ -25,7 +25,7 @@ namespace M4Graphs.Core.General
         /// <returns></returns>
         public static int NodeWidth(string text)
         {
-            // TODO: Measure actual text with font, don't use hardcoded constans
+            // TODO: Measure actual text with font, don't use hardcoded constants
             int hardcodedNumberChangeASAP = 8; // number that will most likely only work with the default Wpf textblock font
             return (text.Length * hardcodedNumberChangeASAP) + NodeWidthMargin;
         }

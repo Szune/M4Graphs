@@ -10,18 +10,19 @@ namespace M4Graphs.Wpf
         /// <summary>
         /// Returns the color used for elements the user hovers over.
         /// </summary>
-        public static Brush HoverColor = Brushes.CadetBlue;
+        public static readonly Brush HoverColor = Brushes.CadetBlue;
         /// <summary>
         /// Returns the color used for activated elements.
         /// </summary>
-        public static Brush ActivatedColor = Brushes.Lavender;
+        public static readonly Brush ActivatedColor = Brushes.Lavender;
 
         /// <summary>
         /// Returns the color used for filtered elements.
         /// </summary>
+        // TODO: Make these colors individually customizable per model
         public static Brush FilteredColor = Brushes.LightSteelBlue;
 
-        private const int lowestColor = 40;
+        private const int LowestColor = 40;
 
         /// <summary>
         /// Gets a green <see cref="Brush"/> based on the specified heat.
@@ -40,7 +41,7 @@ namespace M4Graphs.Wpf
         /// <returns></returns>
         public static Color GetGreenColor(double heat)
         {
-            return new Color { A = 255, R = 0, G = (byte)(lowestColor + ((250 - lowestColor) * heat)), B = 0 };
+            return new Color { A = 255, R = 0, G = (byte)(LowestColor + ((250 - LowestColor) * heat)), B = 0 };
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace M4Graphs.Wpf
         /// <returns></returns>
         public static Color GetRedColor(double heat)
         {
-            return new Color { A = 255, R = (byte)(lowestColor + ((250 - lowestColor) * heat)), G = 0, B = 0 };
+            return new Color { A = 255, R = (byte)(LowestColor + ((250 - LowestColor) * heat)), G = 0, B = 0 };
         }
     }
 }
