@@ -1,3 +1,4 @@
+**Note:** Everything is currently being refactored.
 # M4Graphs
 M4Graphs is a framework intended for visualizing model based tests during runtime.
 

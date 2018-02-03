@@ -24,10 +24,10 @@ namespace M4Graphs.Core.Geometry
             var x1 = collidingNode.CenterX;
             var y1 = collidingNode.CenterY;
 
-            var vinkel = Math.Acos((y2 - y1) / Math.Sqrt(Math.Pow((y2 - y1), 2) + Math.Pow((x2 - x1), 2)));
+            var angle = Math.Acos((y2 - y1) / Math.Sqrt(Math.Pow((y2 - y1), 2) + Math.Pow((x2 - x1), 2)));
 
-            var närliggandeKatet = collidingNode.Height / 2;
-            var motståendeKatet = närliggandeKatet * Math.Tan(vinkel);
+            var nearbyCathetus = collidingNode.Height / 2;
+            var opposingCathetus = nearbyCathetus * Math.Tan(angle);
 
             if (Math.Abs(collidingNode.CenterY - nextLastPoint.Y) > yPrecision)
             {
@@ -35,26 +35,26 @@ namespace M4Graphs.Core.Geometry
                 // aim for the center of the target node
                 if (collidingNode.CenterY >= nextLastPoint.Y)
                 {
-                    newY -= närliggandeKatet;
+                    newY -= nearbyCathetus;
                     if (collidingNode.CenterX >= nextLastPoint.X)
                     {
-                        newX += motståendeKatet;
+                        newX += opposingCathetus;
                     }
                     else
                     {
-                        newX -= motståendeKatet;
+                        newX -= opposingCathetus;
                     }
                 }
                 else
                 {
-                    newY += närliggandeKatet;
+                    newY += nearbyCathetus;
                     if (collidingNode.CenterX >= nextLastPoint.X)
                     {
-                        newX -= motståendeKatet;
+                        newX -= opposingCathetus;
                     }
                     else
                     {
-                        newX += motståendeKatet;
+                        newX += opposingCathetus;
                     }
                 }
             }
