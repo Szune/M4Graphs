@@ -23,6 +23,21 @@ namespace M4GraphsTest.Core
             _sut.Add(new DefaultNodeElement(i.ToString(), i.ToString()));
         }
 
+        [TestInitialize]
+        public void Initialize()
+        {
+            _sut.Clear();
+        }
+
+        [TestMethod]
+        public void Clear_should_clear_all_elements()
+        {
+            PrepareCollection();
+            _sut.Clear();
+            _sut.Nodes.Should().HaveCount(0);
+            _sut.Edges.Should().HaveCount(0);
+        }
+
         [TestMethod]
         public void Node_Enumeration_Enumerates_Nodes()
         {
