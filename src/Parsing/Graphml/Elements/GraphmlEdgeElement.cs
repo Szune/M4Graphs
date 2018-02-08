@@ -3,7 +3,6 @@ using System.Linq;
 using M4Graphs.Core.Elements;
 using M4Graphs.Core.Elements.Labels;
 using M4Graphs.Core.Geometry;
-using M4Graphs.Parsers.Graphml.EdgeLabels;
 
 namespace M4Graphs.Parsers.Graphml.Elements
 {

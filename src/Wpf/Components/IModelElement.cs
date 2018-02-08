@@ -1,7 +1,6 @@
 ﻿using M4Graphs.Core.General;
 using System;
 using System.Collections.Generic;
-using System.Windows;
 using M4Graphs.Core.Geometry;
 using M4Graphs.Core.Interfaces;
 

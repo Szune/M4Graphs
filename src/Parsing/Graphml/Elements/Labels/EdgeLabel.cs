@@ -1,5 +1,4 @@
-﻿using M4Graphs.Core.Elements;
-using M4Graphs.Core.Elements.Labels;
+﻿using M4Graphs.Core.Elements.Labels;
 using M4Graphs.Core.Geometry;
 
 namespace M4Graphs.Parsers.Graphml.EdgeLabels

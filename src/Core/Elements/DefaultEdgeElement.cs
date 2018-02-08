@@ -1,5 +1,4 @@
-﻿using M4Graphs.Core.General;
-using M4Graphs.Core.Geometry;
+﻿using M4Graphs.Core.Geometry;
 
 namespace M4Graphs.Core.Elements
 {

@@ -1,7 +1,6 @@
 ﻿using M4Graphs.Core;
 using System;
 using System.IO;
-using M4Graphs.Core.Elements;
 using M4Graphs.Parsers.Graphml.Elements;
 
 namespace M4Graphs.Parsers.Graphml

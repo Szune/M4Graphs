@@ -1,7 +1,6 @@
 ﻿using M4Graphs.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Timers;
 using System.Windows;
 using M4Graphs.Core.Elements;

@@ -1,5 +1,4 @@
 ﻿using M4Graphs.Core.General;
-using M4Graphs.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using M4Graphs.Wpf.Components;

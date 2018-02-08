@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using M4Graphs.Parsers.Graphml.EdgeLabels;
+﻿using M4Graphs.Parsers.Graphml.EdgeLabels;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using M4Graphs.Core;
-using M4Graphs.Core.Elements;
-using M4Graphs.Core.Geometry;
 using M4Graphs.Parsers.Graphml.Elements;
 
 namespace M4Graphs.Parsers.Graphml

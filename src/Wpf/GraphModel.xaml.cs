@@ -11,14 +11,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using M4Graphs.Core.Elements;
-using M4Graphs.Core.Geometry;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
-using Color = System.Windows.Media.Color;
 using Point = System.Windows.Point;
-using M4Graphs.Parsers.Graphml;
-using M4Graphs.Parsers.Graphml.Elements;
-using M4Graphs.Wpf.Rendering;
 
 namespace M4Graphs.Wpf
 {
