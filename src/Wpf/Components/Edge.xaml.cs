@@ -1,10 +1,9 @@
 ﻿using M4Graphs.Core.General;
-using M4Graphs.Core.Interfaces;
+using M4Graphs.Core.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -13,15 +12,15 @@ namespace M4Graphs.Wpf.Components
     /// <summary>
     /// Interaction logic for Edge.xaml
     /// </summary>
-    public partial class Edge : UserControl, IDynamicModelElement
+    public partial class Edge
     {
         private Brush ColorNormal = Brushes.Black;
 
-        public string Id { get; private set; }
-        public ElementStates States { get; private set; } = ElementStates.Normal;
-        public bool IsVisited { get; private set; }
+        public override string Id { get; }
+        public override ElementStates States { get; protected set; } = ElementStates.Normal;
+        public override bool IsVisited { get; protected set; }
 
-        public bool HasErrors => Errors.Any();
+        public override bool HasErrors => Errors.Any();
 
         private enum Direction
         {
@@ -33,10 +32,10 @@ namespace M4Graphs.Wpf.Components
 
         private Direction ArrowDirection;
 
-        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(PathPoint), typeof(Edge), new FrameworkPropertyMetadata(PathPoint.Zero, FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsRender));
-        public PathPoint Position
+        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(Coordinate), typeof(Edge), new FrameworkPropertyMetadata(Coordinate.Zero, FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsRender));
+        public override Coordinate Position
         {
-            get { return (PathPoint)GetValue(PositionProperty); }
+            get { return (Coordinate)GetValue(PositionProperty); }
             set { SetValue(PositionProperty, value); }
         }
 
@@ -72,6 +71,7 @@ namespace M4Graphs.Wpf.Components
         {
             Id = id;
             EdgeArrow.Stroke = color;
+            ColorNormal = color;
             SetPoints(points);
         }
 
@@ -90,7 +90,7 @@ namespace M4Graphs.Wpf.Components
             EdgeMouseOver.Points = points;
             var x = points?.Max(p => p.X) ?? 0;
             var y = points?.Max(p => p.Y) ?? 0;
-            Position = new PathPoint(x, y);
+            Position = new Coordinate(x, y);
         }
 
         private PointCollection BendEdge(PointCollection points)
@@ -122,14 +122,14 @@ namespace M4Graphs.Wpf.Components
             return roundedPoints;
         }
 
-        public void Activate()
+        public override void Activate()
         {
             IsVisited = true;
             States = States.AddFlag(ElementStates.Activated);
             UpdateColor();
         }
 
-        public void Deactivate()
+        public override void Deactivate()
         {
             States = States.RemoveFlag(ElementStates.Activated);
             UpdateColor();
@@ -173,7 +173,7 @@ Position of last point: {EdgeArrow.Points.Last().X},{EdgeArrow.Points.Last().Y}"
                 EdgeArrow.Stroke = color);
         }
 
-        public void UpdateHeat(double heat)
+        public override void UpdateHeat(double heat)
         {
             _lastHeat = heat;
             ColorNormal = GetColor(_lastHeat);
@@ -187,14 +187,14 @@ Position of last point: {EdgeArrow.Points.Last().X},{EdgeArrow.Points.Last().Y}"
             return ColorManager.GetGreenBrush(heat);
         }
 
-        public void AddError(ExecutingElementMethodError error)
+        public override void AddError(ExecutingElementMethodError error)
         {
             Errors.Add(error);
             ColorNormal = GetColor(_lastHeat);
             UpdateColor();
         }
 
-        public void Filter(List<Predicate<IDynamicModelElement>> filter)
+        public override void Filter(List<Predicate<IModelElement>> filter)
         {
             if (filter.Any(f => f(this)))
             {

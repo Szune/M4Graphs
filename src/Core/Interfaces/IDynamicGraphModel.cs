@@ -1,4 +1,4 @@
-﻿using M4Graphs.Core.DrawableModelElements;
+﻿using M4Graphs.Core.Elements;
 using M4Graphs.Core.General;
 
 namespace M4Graphs.Core.Interfaces
@@ -6,30 +6,21 @@ namespace M4Graphs.Core.Interfaces
     /// <summary>
     /// An interface representing a dynamic graph model implementation.
     /// </summary>
-    public interface IDynamicGraphModel
+    public interface IDynamicGraphModel<out TModelType> where TModelType : IDynamicGraphModel<TModelType>
     {
         /// <summary>
         /// Resets the dynamic graph model.
         /// </summary>
         void Reset();
         /// <summary>
-        /// Sets the associated model, used for getting elements to draw.
-        /// </summary>
-        /// <param name="model"></param>
-        void Set(IModel model);
-        /// <summary>
         /// Refreshes the dynamic graph model, without touching unchanged elements.
         /// </summary>
         void Refresh();
         /// <summary>
-        /// Draws the dynamic graph model with the help of the associated model.
+        /// Draws the dynamic graph model with the help of an element collection.
         /// </summary>
-        void Draw();
-        /// <summary>
-        /// Draws the dynamic graph model with the help of a <see cref="DrawableElementCollection"/>.
-        /// </summary>
-        /// <param name="collection">The collection of elements to draw.</param>
-        void Draw(DrawableElementCollection collection);
+        /// <param name="renderer">The renderer to use when drawing.</param>
+        void Draw(IRenderer<TModelType> renderer);
         /// <summary>
         /// Activates the specified element, deactivating the last activated element.
         /// </summary>

@@ -57,6 +57,7 @@
     <Compile Include="Components\Edge.xaml.cs">
       <DependentUpon>Edge.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\ModelElementBase.cs" />
     <Compile Include="Components\Node.xaml.cs">
       <DependentUpon>Node.xaml</DependentUpon>
     </Compile>
@@ -66,8 +67,11 @@
     <Compile Include="DispatcherExtensions.cs" />
     <Compile Include="Filtering\Filters.cs" />
     <Compile Include="Filtering\HeatMapFilter.cs" />
+    <Compile Include="Components\IModelElement.cs" />
     <Compile Include="MouseDrag.cs" />
-    <Compile Include="PathPointExtensions.cs" />
+    <Compile Include="CoordinateExtensions.cs" />
+    <Compile Include="Rendering\GraphmlRenderer.cs" />
+    <Compile Include="Rendering\WpfRenderer.cs" />
     <Compile Include="Shapes\PolylineArrow.cs" />
     <Page Include="Components\Edge.xaml">
       <SubType>Designer</SubType>
@@ -120,7 +124,10 @@
     <ProjectReference Include="..\Core\M4Graphs.Core.csproj">
       <Project>{b1b25cfe-d71d-4aa3-b339-2ed72fb85fd0}</Project>
       <Name>M4Graphs.Core</Name>
-      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Parsing\M4Graphs.Parsing.csproj">
+      <Project>{99369CCE-34C6-4CB8-B183-49AA36C8C323}</Project>
+      <Name>M4Graphs.Parsing</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

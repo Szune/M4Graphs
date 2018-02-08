@@ -1,10 +1,14 @@
 ﻿using M4Graphs.Core;
-using M4Graphs.Core.ModelElements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using System.Windows;
+using M4Graphs.Core.Elements;
+using M4Graphs.Core.Geometry;
+using M4Graphs.Generators;
+using M4Graphs.Parsers;
+using M4Graphs.Wpf.Rendering;
 
 namespace M4Graphs.WpfTest
 {
@@ -13,8 +17,8 @@ namespace M4Graphs.WpfTest
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<Tuple<string, ModelEdge, ModelNode, bool>> doStuff = new List<Tuple<string, ModelEdge, ModelNode, bool>>();
-        List<Tuple<string, ModelEdge, ModelNode, bool>> doStuffCopy = new List<Tuple<string, ModelEdge, ModelNode, bool>>();
+        List<Tuple<string, DefaultEdgeElement, DefaultNodeElement, bool>> doStuff = new List<Tuple<string, DefaultEdgeElement, DefaultNodeElement, bool>>();
+        List<Tuple<string, DefaultEdgeElement, DefaultNodeElement, bool>> doStuffCopy = new List<Tuple<string, DefaultEdgeElement, DefaultNodeElement, bool>>();
         Queue<Action> addHeat = new Queue<Action>();
 
         private Timer simulationTimer;
@@ -36,8 +40,10 @@ namespace M4Graphs.WpfTest
         {
             Reset();
 
-            var reader = Model.Reader.FromFile(@"D:\exempel.graphml").Offset(20, 20).Build();
-            dgm.Draw(reader.GetElements());
+            var reader = ModelParser.Graphml.FromFile(@"D:\exempel.graphml").Build();
+            var renderer = WpfRenderer.Graphml(reader.GetElements());
+            renderer.SetOffset(new Coordinate(20, 20));
+            dgm.Draw(renderer);
             CreatePreconditionsForSimulatingTheModel();
             //CreatePreconditionsForBuildingTheModel();
         }
@@ -63,35 +69,35 @@ namespace M4Graphs.WpfTest
         {
             for (int i = 1; i < 6; i += 2)
             {
-                doStuff.Add(Tuple.Create("n" + i, ModelElementFactory.CreateEdge("e" + (i + 1), "Edge" + (i + 1)), null as ModelNode, false));
-                doStuff.Add(Tuple.Create("e" + (i + 1), null as ModelEdge, ModelElementFactory.CreateNode("n" + (i + 2), "Node" + (i + 2)), false));
+                doStuff.Add(Tuple.Create("n" + i, ModelElementFactory.CreateEdge("e" + (i + 1), "Edge" + (i + 1)), null as DefaultNodeElement, false));
+                doStuff.Add(Tuple.Create("e" + (i + 1), null as DefaultEdgeElement, ModelElementFactory.CreateNode("n" + (i + 2), "Node" + (i + 2)), false));
             }
 
             for (int i = 1; i < 6; i += 2)
             {
-                doStuff.Add(Tuple.Create("n" + i, ModelElementFactory.CreateEdge("e" + (i + 10), "Edge" + (i + 10)), null as ModelNode, false));
-                doStuff.Add(Tuple.Create("e" + (i + 10), null as ModelEdge, ModelElementFactory.CreateNode("n" + (i + 11), "Nooooooooooooode" + (i + 11)), false));
+                doStuff.Add(Tuple.Create("n" + i, ModelElementFactory.CreateEdge("e" + (i + 10), "Edge" + (i + 10)), null as DefaultNodeElement, false));
+                doStuff.Add(Tuple.Create("e" + (i + 10), null as DefaultEdgeElement, ModelElementFactory.CreateNode("n" + (i + 11), "Nooooooooooooode" + (i + 11)), false));
             }
 
             for (int i = 1; i < 6; i += 2)
             {
-                doStuff.Add(Tuple.Create("n" + i, ModelElementFactory.CreateEdge("e" + (i + 30), "Edge" + (i + 30)), null as ModelNode, false));
-                doStuff.Add(Tuple.Create("e" + (i + 30), null as ModelEdge, ModelElementFactory.CreateNode("n" + (i + 31), "Node" + (i + 31)), false));
+                doStuff.Add(Tuple.Create("n" + i, ModelElementFactory.CreateEdge("e" + (i + 30), "Edge" + (i + 30)), null as DefaultNodeElement, false));
+                doStuff.Add(Tuple.Create("e" + (i + 30), null as DefaultEdgeElement, ModelElementFactory.CreateNode("n" + (i + 31), "Node" + (i + 31)), false));
             }
 
             for (int i = 1; i < 6; i += 2)
             {
                 doStuff.Add(Tuple.Create("n" + (i + 11), ModelElementFactory.CreateEdge("e" + (i + 50), "Edge" + (i + 50)), ModelElementFactory.CreateNode("n" + i, "w/e"), true));
             }
-            doStuffCopy = new List<Tuple<string, ModelEdge, ModelNode, bool>>(doStuff);
+            doStuffCopy = new List<Tuple<string, DefaultEdgeElement, DefaultNodeElement, bool>>(doStuff);
         }
 
         private void Reset()
         {
-            var model = new ModelGenerator(80, 40);
-            model.SetStartNode(ModelElementFactory.CreateNode("n1", "Start"));
-            dgm.Set(model);
-            dgm.Draw();
+            var model = ModelGenerator.Default.Margins(80, 40).StartNode("n1","Start").Build();
+            // TODO: make a renderer for DefaultModelGenerator
+            //dgm.Set(model);
+            //dgm.Draw();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -112,25 +118,30 @@ namespace M4Graphs.WpfTest
 
         private void BuildTree()
         {
-            if (!doStuffCopy.Any()) return;
-            var act = doStuffCopy.First();
-            if (!act.Item4)
-            {
-                var el = (IModelElement)act.Item2 ?? act.Item3;
-                (dgm.Model as ModelGenerator).AddElement(act.Item1, el);
-            }
-            else
-            {
-                (dgm.Model as ModelGenerator).AddElement(act.Item1, act.Item2);
-                (dgm.Model as ModelGenerator).Connect(act.Item2.Id, act.Item3.Id);
-            }
-            doStuffCopy.Remove(doStuffCopy.First());
-            dgm.Draw();
+            //if (!doStuffCopy.Any()) return;
+            //var act = doStuffCopy.First();
+            //if (!act.Item4)
+            //{
+            //    if(act.Item2 != null)
+            //        (dgm.Model as DefaultModelGenerator).AddElement(act.Item1, act.Item2);
+            //    else
+            //    {
+            //        (dgm.Model as DefaultModelGenerator).AddElement(act.Item1, act.Item3);
+            //    }
+            //}
+            //else
+            //{
+            //    (dgm.Model as DefaultModelGenerator).AddElement(act.Item1, act.Item2);
+            //    (dgm.Model as DefaultModelGenerator).Connect(act.Item2.Id, act.Item3.Id);
+            //}
+            //doStuffCopy.Remove(doStuffCopy.First());
+            //dgm.Draw();
+            // TODO: rewrite DefaultModelGenerator and create a renderer for it
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            doStuffCopy = new List<Tuple<string, ModelEdge, ModelNode, bool>>(doStuff);
+            doStuffCopy = new List<Tuple<string, DefaultEdgeElement, DefaultNodeElement, bool>>(doStuff);
             Reset();
         }
     }

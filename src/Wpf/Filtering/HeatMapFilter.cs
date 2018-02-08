@@ -1,11 +1,11 @@
-﻿using M4Graphs.Core.General;
-using M4Graphs.Core.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using M4Graphs.Core.General;
+using M4Graphs.Wpf.Components;
 
 namespace M4Graphs.Wpf.Filtering
 {
-    public class HeatMapFilter : IFilter<IDynamicModelElement>
+    public class HeatMapFilter : IFilter<IModelElement>
     {
         private bool _hideGreen;
         private bool _hideRed;
@@ -28,13 +28,13 @@ namespace M4Graphs.Wpf.Filtering
             parent.Update();
         }
 
-        public List<Predicate<IDynamicModelElement>> GetFilters()
+        public List<Predicate<IModelElement>> GetFilters()
         {
-            var filters = new List<Predicate<IDynamicModelElement>>();
+            var filters = new List<Predicate<IModelElement>>();
             if (_hideRed)
-                filters.Add(new Predicate<IDynamicModelElement>(target => target.HasErrors));
+                filters.Add(target => target.HasErrors);
             if (_hideGreen)
-                filters.Add(new Predicate<IDynamicModelElement>(target => target.IsVisited && !target.HasErrors));
+                filters.Add(target => target.IsVisited && !target.HasErrors);
             return filters;
         }
     }

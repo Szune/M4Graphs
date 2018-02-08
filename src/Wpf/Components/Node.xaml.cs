@@ -1,10 +1,9 @@
 ﻿using M4Graphs.Core.General;
-using M4Graphs.Core.Interfaces;
+using M4Graphs.Core.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -13,25 +12,28 @@ namespace M4Graphs.Wpf.Components
     /// <summary>
     /// Interaction logic for Node.xaml
     /// </summary>
-    public partial class Node : UserControl, IDynamicModelElement
+    public partial class Node
     {
         private Brush ColorNormal = Brushes.DarkGoldenrod;
 
-        public string Id { get; private set; }
-        public ElementStates States { get; private set; } = ElementStates.Normal;
-        public bool IsVisited { get; private set; }
+        public override string Id { get; }
+        public override ElementStates States { get; protected set; } = ElementStates.Normal;
+        public override bool IsVisited { get; protected set; }
 
-        public bool HasErrors => Errors.Any();
+        public override bool HasErrors => Errors.Any();
 
         public List<ExecutingElementMethodError> Errors { get; } = new List<ExecutingElementMethodError>();
 
         private double _lastHeat;
 
-        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(PathPoint), typeof(Node), new FrameworkPropertyMetadata(PathPoint.Zero, FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position",
+            typeof(Coordinate), typeof(Node),
+            new FrameworkPropertyMetadata(Coordinate.Zero,
+                FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsRender));
 
-        public PathPoint Position
+        public override Coordinate Position
         {
-            get { return (PathPoint)GetValue(PositionProperty); }
+            get { return (Coordinate)GetValue(PositionProperty); }
             set { SetValue(PositionProperty, value); }
         }
 
@@ -53,7 +55,7 @@ namespace M4Graphs.Wpf.Components
 
         private void SetPosition(double maxX, double maxY)
         {
-            Position = new PathPoint(maxX, maxY);
+            Position = new Coordinate(maxX, maxY);
         }
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -66,14 +68,14 @@ Height: {NodeBackground.Height}
 Position: {NodeBackground.Margin.Left},{NodeBackground.Margin.Top}");
         }
 
-        public void Activate()
+        public override void Activate()
         {
             IsVisited = true;
             States = States.AddFlag(ElementStates.Activated);
             UpdateColor();
         }
 
-        public void Deactivate()
+        public override void Deactivate()
         {
             States = States.RemoveFlag(ElementStates.Activated);
             UpdateColor();
@@ -109,7 +111,7 @@ Position: {NodeBackground.Margin.Left},{NodeBackground.Margin.Top}");
                 NodeBackground.Background = color);
         }
 
-        public void UpdateHeat(double heat)
+        public override void UpdateHeat(double heat)
         {
             _lastHeat = heat;
             ColorNormal = GetColor(_lastHeat);
@@ -118,19 +120,19 @@ Position: {NodeBackground.Margin.Left},{NodeBackground.Margin.Top}");
 
         private Brush GetColor(double heat)
         {
-            if(HasErrors)
+            if (HasErrors)
                 return ColorManager.GetRedBrush(heat);
             return ColorManager.GetGreenBrush(heat);
         }
 
-        public void AddError(ExecutingElementMethodError error)
+        public override void AddError(ExecutingElementMethodError error)
         {
             Errors.Add(error);
             ColorNormal = GetColor(_lastHeat);
             UpdateColor();
         }
 
-        public void Filter(List<Predicate<IDynamicModelElement>> filter)
+        public override void Filter(List<Predicate<IModelElement>> filter)
         {
             if (filter.Any(f => f(this)))
             {
@@ -142,6 +144,7 @@ Position: {NodeBackground.Margin.Left},{NodeBackground.Margin.Top}");
                 NodeGrid.Visibility = Visibility.Visible;
                 States = States.RemoveFlag(ElementStates.Filtered);
             }
+
             UpdateColor(); // keeping this in case of only wanting to change the color of filtered elements
         }
     }

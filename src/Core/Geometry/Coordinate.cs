@@ -1,48 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace M4Graphs.Core.General
+namespace M4Graphs.Core.Geometry
 {
     /// <inheritdoc />
     /// <summary>
-    /// A class representing a point in a model.
+    /// Immutable class representing a point in a model.
     /// </summary>
-    public class PathPoint : IEquatable<PathPoint>
+    public class Coordinate : IEquatable<Coordinate>
     {
         /// <summary>
         /// Returns a new point with <see cref="X"/> and <see cref="Y"/> values set to zero.
         /// </summary>
-        public static PathPoint Zero => new PathPoint(0, 0);
+        public static Coordinate Zero => new Coordinate(0, 0);
         /// <summary>
         /// The x coordinate of the point.
         /// </summary>
-        public double X { get; private set; }
+        public double X { get; }
         /// <summary>
         /// The y coordinate of the point.
         /// </summary>
-        public double Y { get; private set; }
+        public double Y { get; }
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public PathPoint(double x, double y)
+        public Coordinate(double x, double y)
         {
             X = x;
             Y = y;
         }
-
-        /// <summary>
-        /// Sets the position of the point.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public void SetPosition(double x, double y)
-        {
-            X = x;
-            Y = y;
-        }
-
 
         /// <summary>
         /// Returns a string that represents the current object.
@@ -50,15 +38,15 @@ namespace M4Graphs.Core.General
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{X}, {Y}";
+            return $"{X},{Y}";
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as PathPoint);
+            return Equals(obj as Coordinate);
         }
 
-        public virtual bool Equals(PathPoint other)
+        public virtual bool Equals(Coordinate other)
         {
             const double tolerance = 0.01;
             return other != null &&
@@ -74,12 +62,12 @@ namespace M4Graphs.Core.General
             return hashCode;
         }
 
-        public static bool operator ==(PathPoint point1, PathPoint point2)
+        public static bool operator ==(Coordinate point1, Coordinate point2)
         {
-            return EqualityComparer<PathPoint>.Default.Equals(point1, point2);
+            return EqualityComparer<Coordinate>.Default.Equals(point1, point2);
         }
 
-        public static bool operator !=(PathPoint point1, PathPoint point2)
+        public static bool operator !=(Coordinate point1, Coordinate point2)
         {
             return !(point1 == point2);
         }

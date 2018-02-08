@@ -2,22 +2,23 @@
 using M4Graphs.Core.Interfaces;
 using System;
 using System.Collections.Generic;
+using M4Graphs.Wpf.Components;
 
 namespace M4Graphs.Wpf.Filtering
 {
-    public class Filters : IFilter<IDynamicModelElement>
+    public class Filters : IFilter<IModelElement>
     {
         public readonly HeatMapFilter HeatMap;
         private bool _hideVisited;
 
-        public List<Predicate<IDynamicModelElement>> Current { get; private set; }
+        public List<Predicate<IModelElement>> Current { get; private set; }
         public Filters()
         {
             HeatMap = new HeatMapFilter(this);
-            Current = new List<Predicate<IDynamicModelElement>>(); // default is to filter nothing
+            Current = new List<Predicate<IModelElement>>(); // default is to filter nothing
         }
 
-        public List<Predicate<IDynamicModelElement>> GetFilters()
+        public List<Predicate<IModelElement>> GetFilters()
         {
             Update();
             return Current;

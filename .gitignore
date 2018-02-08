@@ -264,3 +264,4 @@ paket-files/
 __pycache__/
 *.pyc
 /.sonarqube
+/src/Core/DrawableModelElements.Obsolete

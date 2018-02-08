@@ -1,6 +1,6 @@
-﻿using M4Graphs.Core.ModelElements;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
+using M4Graphs.Core.Elements;
 
 namespace M4Graphs.Core
 {
@@ -9,17 +9,17 @@ namespace M4Graphs.Core
     /// </summary>
     public static class ModelElementFactory
     {
-        private static ConcurrentBag<ModelNode> NodePool { get; }
-        private static Func<ModelNode> NodeGenerator { get; }
-        private static ConcurrentBag<ModelEdge> EdgePool { get; }
-        private static Func<ModelEdge> EdgeGenerator { get; }
+        private static ConcurrentBag<DefaultNodeElement> NodePool { get; }
+        private static Func<DefaultNodeElement> NodeGenerator { get; }
+        private static ConcurrentBag<DefaultEdgeElement> EdgePool { get; }
+        private static Func<DefaultEdgeElement> EdgeGenerator { get; }
         
         static ModelElementFactory()
         {
-            NodePool = new ConcurrentBag<ModelNode>();
-            EdgePool = new ConcurrentBag<ModelEdge>();
-            NodeGenerator = () => new ModelNode();
-            EdgeGenerator = () => new ModelEdge();
+            NodePool = new ConcurrentBag<DefaultNodeElement>();
+            EdgePool = new ConcurrentBag<DefaultEdgeElement>();
+            NodeGenerator = () => new DefaultNodeElement();
+            EdgeGenerator = () => new DefaultEdgeElement();
         }
 
         /// <summary>
@@ -37,14 +37,14 @@ namespace M4Graphs.Core
         }
 
         /// <summary>
-        /// Returns a <see cref="ModelNode"/> with the specified identifier and text.
+        /// Returns a <see cref="DefaultNodeElement"/> with the specified identifier and text.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static ModelNode CreateNode(string id, string text)
+        public static DefaultNodeElement CreateNode(string id, string text)
         {
-            ModelNode item;
+            DefaultNodeElement item;
             if (NodePool.TryTake(out item))
             {
                 item.Id = id;
@@ -60,14 +60,14 @@ namespace M4Graphs.Core
         }
 
         /// <summary>
-        /// Returns a <see cref="ModelEdge"/> with the specified identifier and text.
+        /// Returns a <see cref="DefaultEdgeElement"/> with the specified identifier and text.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static ModelEdge CreateEdge(string id, string text)
+        public static DefaultEdgeElement CreateEdge(string id, string text)
         {
-            ModelEdge item;
+            DefaultEdgeElement item;
             if (EdgePool.TryTake(out item))
             {
                 item.Id = id;
@@ -83,13 +83,13 @@ namespace M4Graphs.Core
         }
 
         /// <summary>
-        /// Returns a <see cref="ModelEdge"/> with the specified identifier, text and parent node.
+        /// Returns a <see cref="DefaultEdgeElement"/> with the specified identifier, text and parent node.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="text"></param>
         /// <param name="parentNode"></param>
         /// <returns></returns>
-        public static ModelEdge CreateEdge(string id, string text, ModelNode parentNode)
+        public static DefaultEdgeElement CreateEdge(string id, string text, DefaultNodeElement parentNode)
         {
             var edge = CreateEdge(id, text);
             edge.SetParentNode(parentNode);
@@ -97,21 +97,21 @@ namespace M4Graphs.Core
         }
 
         /// <summary>
-        /// Puts the <see cref="ModelNode"/> back into the pool.
+        /// Puts the <see cref="DefaultNodeElement"/> back into the pool.
         /// </summary>
         /// <param name="node"></param>
-        public static void Put(ModelNode node)
+        public static void Put(DefaultNodeElement node)
         {
             NodePool.Add(node);
         }
 
         /// <summary>
-        /// Puts the <see cref="ModelEdge"/> back into the pool.
+        /// Puts the <see cref="DefaultEdgeElement"/> back into the pool.
         /// </summary>
-        /// <param name="edge"></param>
-        public static void Put(ModelEdge edge)
+        /// <param name="edgeElement"></param>
+        public static void Put(DefaultEdgeElement edgeElement)
         {
-            EdgePool.Add(edge);
+            EdgePool.Add(edgeElement);
         }
     }
 }

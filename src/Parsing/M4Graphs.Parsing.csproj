@@ -42,10 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Graphml\EdgeLabels\EdgeLabel.cs" />
-    <Compile Include="Graphml\EdgeLabels\SmartEdgeLabel.cs" />
+    <Compile Include="Graphml\Elements\GraphmlEdgeElement.cs" />
+    <Compile Include="Graphml\Elements\GraphmlNodeElement.cs" />
+    <Compile Include="Graphml\Elements\Labels\EdgeLabel.cs" />
+    <Compile Include="Graphml\Elements\Labels\SmartEdgeLabel.cs" />
     <Compile Include="Graphml\GraphmlStringParser.cs" />
-    <Compile Include="Graphml\GraphmlElementFormatException.cs" />
     <Compile Include="Graphml\SerializableGraphml.cs" />
     <Compile Include="IModelParser.cs" />
     <Compile Include="Graphml\GraphmlParser.cs" />

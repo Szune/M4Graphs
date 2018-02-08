@@ -1,13 +1,16 @@
 ﻿using M4Graphs.Core.General;
 using System;
 using System.Collections.Generic;
+using System.Windows;
+using M4Graphs.Core.Geometry;
+using M4Graphs.Core.Interfaces;
 
-namespace M4Graphs.Core.Interfaces
+namespace M4Graphs.Wpf.Components
 {
     /// <summary>
-    /// Represents an element in an <see cref="IDynamicGraphModel"/>.
+    /// Represents an element in a model.
     /// </summary>
-    public interface IDynamicModelElement : IActivatable
+    public interface IModelElement : IActivatable
     {
         /// <summary>
         /// The element's identifier.
@@ -16,7 +19,7 @@ namespace M4Graphs.Core.Interfaces
         /// <summary>
         /// The element's position.
         /// </summary>
-        PathPoint Position { get; }
+        Coordinate Position { get; }
 
         /// <summary>
         /// Updates the element's colorized heat.
@@ -41,7 +44,7 @@ namespace M4Graphs.Core.Interfaces
         /// Filters the element.
         /// </summary>
         /// <param name="filter"></param>
-        void Filter(List<Predicate<IDynamicModelElement>> filter);
+        void Filter(List<Predicate<IModelElement>> filter);
 
         ElementStates States { get; }
     }

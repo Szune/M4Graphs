@@ -24,13 +24,6 @@ namespace M4Graphs.Parsers
             _reader = Activator.CreateInstance<TModelParser>();
         }
 
-        public ModelParser<TModelParser> Offset(int xOffset, int yOffset)
-        {
-            void SetOffset(TModelParser r) => r.SetOffset(xOffset, yOffset);
-            _buildJobs.Push(SetOffset);
-            return this;
-        }
-
         public ModelParser<TModelParser> FromFile(string filePath)
         {
             void SetFilePath(TModelParser r) => r.SetFilePath(filePath);

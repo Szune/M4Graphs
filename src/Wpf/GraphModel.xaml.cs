@@ -1,42 +1,43 @@
 ﻿using M4Graphs.Core;
-using M4Graphs.Core.DrawableModelElements;
 using M4Graphs.Core.General;
 using M4Graphs.Core.Interfaces;
 using M4Graphs.Wpf.Components;
 using M4Graphs.Wpf.Filtering;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using M4Graphs.Core.Elements;
+using M4Graphs.Core.Geometry;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Windows.Media.Color;
 using Point = System.Windows.Point;
+using M4Graphs.Parsers.Graphml;
+using M4Graphs.Parsers.Graphml.Elements;
+using M4Graphs.Wpf.Rendering;
 
 namespace M4Graphs.Wpf
 {
     /// <summary>
     /// Interaction logic for DynamicGraphModel.xaml
     /// </summary>
-    public partial class GraphModel : UserControl, IDynamicGraphModel
+    public partial class GraphModel : IDynamicGraphModel<GraphModel>
     {
-        private IModel _model;
+        // TODO: Change class so that it doesn't care about what type of nodes and edges are used and only draw what's to be drawn... somehow..
+        private IModel<INodeElement, IEdgeElement> _model;
         private int NodeWidth { get; } = 50;
         private int NodeHeight { get; } = 20;
-        private readonly int _yDistance = 110;
-        private int _xDistance = 60;
-        
-        private static int RandVal => Measurements.GetRandom(1, 10);
 
-        private readonly Dictionary<string, IDynamicModelElement> _elements = new Dictionary<string, IDynamicModelElement>();
+        private readonly Dictionary<string, IModelElement> _elements = new Dictionary<string, IModelElement>();
 
-        private IDynamicModelElement _currentlyActivated;
+        private IModelElement _currentlyActivated;
 
         private readonly HeatMap _heatMap = new HeatMap();
+
         private readonly Filters _filters = new Filters();
 
         public static readonly DependencyProperty ModelBackgroundProperty = DependencyProperty.Register("ModelBackground", typeof(Brush), typeof(GraphModel), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, FrameworkPropertyMetadataOptions.AffectsRender));
@@ -48,7 +49,7 @@ namespace M4Graphs.Wpf
             }
         }
 
-        public IModel Model => _model;
+        public IModel<INodeElement, IEdgeElement> Model => _model;
 
         /// <summary>
         /// 0: 25%, 1: 50%, 2: 75%, 3: 100%, 4: 150%, 5: 200%
@@ -74,16 +75,7 @@ namespace M4Graphs.Wpf
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public GraphModel(int xDistance, int yDistance) : this()
-        {
-            _xDistance = xDistance;
-            _yDistance = yDistance;
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        public GraphModel(int nodeWidth, int nodeHeight, int xDistance, int yDistance) : this(xDistance, yDistance)
+        public GraphModel(int nodeWidth, int nodeHeight)
         {
             NodeWidth = nodeWidth;
             NodeHeight = nodeHeight;
@@ -92,7 +84,7 @@ namespace M4Graphs.Wpf
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public GraphModel(Brush background, int nodeWidth, int nodeHeight, int xDistance, int yDistance) : this(nodeWidth, nodeHeight, xDistance, yDistance)
+        public GraphModel(Brush background, int nodeWidth, int nodeHeight) : this(nodeWidth, nodeHeight)
         {
             Main.Background = background;
         }
@@ -101,7 +93,7 @@ namespace M4Graphs.Wpf
         /// Sets the associated <see cref="_model"/> used for drawing.
         /// </summary>
         /// <param name="model"></param>
-        public void Set(IModel model)
+        public void Set(IModel<INodeElement, IEdgeElement> model)
         {
             _model = model;
         }
@@ -116,163 +108,20 @@ namespace M4Graphs.Wpf
             ModelBoard.Children.Clear();
         }
 
-        /// <summary>
-        /// Gets the elements from the model before drawing.
-        /// </summary>
-        public void Draw()
+        public void Draw(IRenderer<GraphModel> renderer)
         {
-            // reset board before drawing
-            Reset();
-            //var elements = _model.GetElements(_xDistance, _yDistance);
-            var elements = _model.GetElements();
-            Draw(elements);
+            renderer.RenderElements(this);
         }
 
-        /// <summary>
-        /// Draws a loaded model.
-        /// </summary>
-        /// <param name="loadedModel"></param>
-        public void Draw(DrawableElementCollection loadedModel)
+        internal void AddElement(ModelElementBase element)
         {
-            // reset board before drawing
-            Reset();
-            foreach (var edge in loadedModel.Edges)
-                DrawEdge(edge.Value, loadedModel);
-
-            foreach (var node in loadedModel.Nodes)
-                DrawNode(node.Value);
+            _elements.Add(element.Id, element);
+            ModelBoard.Children.Add(element);
         }
-
-        private void DrawNode(IDrawableNode node)
-        {
-            // TODO: refactor this method
-            if(node.IsLoaded)
-            {
-                var newNode = new Node(node.Id, node.Text, node.X, node.Y, node.Width, node.Height);
-                AddNode(newNode);
-                // no fun allowed -> newNode.BeginAnimation(HeightProperty, new DoubleAnimation(node.Y, node.Height + node.Y, TimeSpan.FromSeconds(2)))
-                return;
-            }
-            var x = node.X + RandVal;
-            var y = node.Y + RandVal;
-            var calculatedWidth = Measurements.NodeWidth(node.Text);
-            var width = calculatedWidth > Measurements.NodeMinWidth ? calculatedWidth : Measurements.NodeMinWidth;
-
-            var control = new Node(node.Id, node.Text, x, y, width, NodeHeight);
-            AddNode(control);
-        }
-
-        private void AddNode(Node newNode)
-        {
-            _elements.Add(newNode.Id, newNode);
-            ModelBoard.Children.Add(newNode);
-        }
-
-        private void DrawEdge(IDrawableEdge edge, DrawableElementCollection collection)
-        {
-            // TODO: refactor this method
-
-            if (edge.IsLoaded)
-            {
-                var loadedPoints = PathPointsToPointCollection(edge.Points);
-                var source = collection.Nodes[edge.SourceId];
-                var target = collection.Nodes[edge.TargetId];
-                loadedPoints.Insert(0, new Point(source.CenterX, source.CenterY));
-                PathPoint outside;
-                if (loadedPoints.Count > 1)
-                {
-                    // if there's more than 1 point, to be able to get the correct angle for the last point,
-                    // we need to use the current last point
-                    var nextLast = loadedPoints.Last();
-                    outside = target.GetPointOfEdgeCollision(new PathPoint(nextLast.X, nextLast.Y));
-                }
-                else
-                {
-                    outside = target.GetPointOfEdgeCollision(new PathPoint(source.CenterX, source.CenterY));
-                }
-                loadedPoints.Add(outside.ToPoint());
-                 
-                Edge newLine;
-                if (edge.Label != null)
-                {
-                    var secondPoint = loadedPoints[1];
-                    var firstPoint = source.GetPointOfEdgeCollision(new PathPoint(secondPoint.X, secondPoint.Y));
-                    // get first x and y coordinates outside of source node
-                    var labelPoint = edge.Label.GetActualPosition(firstPoint.X, firstPoint.Y);
-                    newLine = new Edge(edge.Id, edge.Text, loadedPoints, labelPoint.ToPoint());
-                }
-                else
-                    newLine = new Edge(edge.Id, edge.Text, loadedPoints);
-
-                // add edge to board
-                AddEdge(newLine);
-                return;
-            }
-
-            var points = new PointCollection();
-            if (edge.SourceNode == null) return; // can't draw if there's no starting point
-            var start = edge.SourceNode;
-            points.Add(new Point(start.X + (NodeWidth / 2) + RandVal, start.Y + NodeHeight));
-
-            if (edge.TargetNode != null)
-            {
-                var end = edge.TargetNode;
-
-                if (end.Y < start.Y)
-                {
-                    points.Add(new Point(end.X + (NodeWidth / 2) + RandVal, end.Y + NodeHeight + 10));
-                }
-                else
-                {
-                    points.Add(new Point(end.X + (NodeWidth / 2) + RandVal, end.Y));
-                }
-            }
-            else
-            {
-                // not attached - just draw a straight line or whatever
-                points.Add(new Point(start.X + (NodeWidth / 2) + (edge.X * NodeWidth) + RandVal, start.Y + _yDistance));
-            }
-
-            var line = new Edge(edge.Id, edge.Text, points);
-
-            // add line to board
-            AddEdge(line);
-        }
-
-        private void AddEdge(Edge newEdge)
-        {
-            _elements.Add(newEdge.Id, newEdge);
-            ModelBoard.Children.Add(newEdge);
-        }
-
-        private Color GetColor()
-        {
-            //var r = Convert.ToByte(rand.Next(1, 250));
-            //var g = Convert.ToByte(rand.Next(1, 250));
-            //var b = Convert.ToByte(rand.Next(1, 250));
-            byte r = 1;
-            byte g = 1;
-            byte b = 1;
-            return Color.FromRgb(r, g, b);
-        }
-
-        //private SolidColorBrush AssignOrGetColor(int id)
-        //{
-        //    SolidColorBrush brush;
-        //    if(brushForEdgeId.TryGetValue(id, out brush))
-        //    {
-        //        return brush;
-        //    }
-        //    var color = new SolidColorBrush(GetColor());
-        //    brushForEdgeId.Add(id, color);
-        //    return color;
-        //}
 
         public void Refresh()
         {
-            // TODO: add/remove changed elements from tree, but don't touch any other
-            // for efficiency, handle changes inside Tree.cs 
-            // and do a Tree.ClearChanges() - thingy here after having done the refreshing
+            // TODO: implement functionality for cases where it'd be unnecessary to redraw the entire model
         }
 
         /// <summary>
@@ -339,10 +188,7 @@ namespace M4Graphs.Wpf
             }
         }
 
-        private PointCollection PathPointsToPointCollection(List<PathPoint> points)
-        {
-            return new PointCollection(points.Select(point => new Point(point.X, point.Y)));
-        }
+
 
         private void Main_MouseWheel(object sender, MouseWheelEventArgs e)
         {

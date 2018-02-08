@@ -1,12 +1,13 @@
-﻿using M4Graphs.Core.DrawableModelElements;
-using M4Graphs.Core.General;
-using System;
+﻿using System;
+using M4Graphs.Core.Elements;
+using M4Graphs.Core.Elements.Labels;
+using M4Graphs.Core.Geometry;
 
 namespace M4Graphs.Parsers.Graphml.EdgeLabels
 {
     public class SmartEdgeLabel : IEdgeLabel
     {
-        public PathPoint GetActualPosition(double x, double y)
+        public Coordinate GetViewPosition(double x, double y)
         {
             throw new NotImplementedException();
         }

@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace M4Graphs.Core.ModelElements
+namespace M4Graphs.Core.Elements
 {
     /// <summary>
-    /// The exception that is thrown when a <see cref="ModelEdge"/> is not connected to any <see cref="ModelNode"/>.
+    /// The exception that is thrown when a <see cref="DefaultEdgeElement"/> is not connected to any <see cref="DefaultNodeElement"/>.
     /// </summary>
     public class EdgeNotConnectedException : Exception
     {

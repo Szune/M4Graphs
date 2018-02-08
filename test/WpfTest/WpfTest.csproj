@@ -35,12 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="M4Graphs.Core, Version=2017.11.14.130, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\M4Graphs.Core.2017.11.14.130\lib\net461\M4Graphs.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="M4Graphs.Wpf, Version=2017.11.14.130, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\M4Graphs.Wpf.2017.11.14.130\lib\net461\M4Graphs.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -103,6 +97,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\M4Graphs.Core.csproj">
+      <Project>{b1b25cfe-d71d-4aa3-b339-2ed72fb85fd0}</Project>
+      <Name>M4Graphs.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Generating\M4Graphs.Generating.csproj">
+      <Project>{378ead75-db8d-4a1e-8b1a-9d274e190d5e}</Project>
+      <Name>M4Graphs.Generating</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Parsing\M4Graphs.Parsing.csproj">
+      <Project>{99369cce-34c6-4cb8-b183-49aa36c8c323}</Project>
+      <Name>M4Graphs.Parsing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Wpf\M4Graphs.Wpf.csproj">
+      <Project>{d58d0b8a-3e09-40d0-933c-620cfb228179}</Project>
+      <Name>M4Graphs.Wpf</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

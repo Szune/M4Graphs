@@ -1,5 +1,6 @@
-﻿using M4Graphs.Core.DrawableModelElements;
-using M4Graphs.Core.General;
+﻿using M4Graphs.Core.Elements;
+using M4Graphs.Core.Elements.Labels;
+using M4Graphs.Core.Geometry;
 
 namespace M4Graphs.Parsers.Graphml.EdgeLabels
 {
@@ -21,7 +22,7 @@ namespace M4Graphs.Parsers.Graphml.EdgeLabels
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public PathPoint GetActualPosition(double x, double y)
+        public Coordinate GetViewPosition(double x, double y)
         {
             /* For: Placement = "Free: Anywhere", Preferred Placement = "Anywhere Horizontal"
              * Begin at: The first x and y coordinates of the edge's first point,
@@ -29,7 +30,7 @@ namespace M4Graphs.Parsers.Graphml.EdgeLabels
              * From there: Simply add the x and y coordinates from the graphml (FileX and FileY)
              */
 
-            return new PathPoint(x + FileX, y + FileY);
+            return new Coordinate(x + FileX, y + FileY);
         }
     }
 }
