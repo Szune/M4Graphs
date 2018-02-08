@@ -13,19 +13,9 @@ namespace M4Graphs.Generators
         private const string CLEARED_NODE = "CLEARED_NODE";
         public Margin Margins { get; private set; }
 
-        public DefaultNodeElement StartNode;
-        public readonly Dictionary<string, DefaultNodeElement> Nodes = new Dictionary<string, DefaultNodeElement>();
-        public readonly Dictionary<string, DefaultEdgeElement> Edges = new Dictionary<string, DefaultEdgeElement>();
+        public DefaultNodeElement StartNode { get; private set; }
+        private readonly ElementCollection<DefaultNodeElement, DefaultEdgeElement> _elements = new ElementCollection<DefaultNodeElement, DefaultEdgeElement>();
         
-        /// <summary>
-        /// dictionary&lt;y, amount of nodes&gt;
-        /// </summary>
-        public Dictionary<int, int> NodesAtY = new Dictionary<int, int>();
-        /// <summary>
-        /// dictionary&lt;Id, amount of edges&gt;
-        /// </summary>
-        public Dictionary<string, int> EdgesFromNode = new Dictionary<string, int>();
-
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -65,7 +55,6 @@ namespace M4Graphs.Generators
         /// </summary>
         public void AddStartNode(DefaultNodeElement node)
         {
-            //node.SetPosition(GetNodesAtY(0), 0);
             AddNode(node);
             if (StartNode == null)
                 StartNode = node;
@@ -78,11 +67,9 @@ namespace M4Graphs.Generators
         /// <param name="node">The node to add.</param>
         public void AddElement(string parentEdgeId, DefaultNodeElement node)
         {
-            var parent = Edges[parentEdgeId].SourceNode;
-            //var yLevel = parent.Position.Y + 1;
-            Edges[parentEdgeId].SetTargetNode(node);
+            var parent = _elements.GetEdge(parentEdgeId).SourceNode;
+            _elements.GetEdge(parentEdgeId).SetTargetNode(node);
             node.SetParentNode(parent);
-            //node.SetPosition(GetNodesAtY(yLevel), yLevel);
             AddNode(node);
         }
 
@@ -93,16 +80,14 @@ namespace M4Graphs.Generators
         /// <param name="edgeElement">The edge to add.</param>
         public void AddElement(string parentNodeId, DefaultEdgeElement edgeElement)
         {
-            var parent = Nodes[parentNodeId];
-            //edgeElement.SetPosition(GetEdgesFromNode(parentNodeId), parent.Position.Y);
+            var parent = _elements.GetNode(parentNodeId);
             edgeElement.SetParentNode(parent);
             AddEdge(edgeElement);
         }
 
         public void ClearElements()
         {
-            Nodes.Clear();
-            Edges.Clear();
+            _elements.Clear();
             StartNode = new DefaultNodeElement(CLEARED_NODE, CLEARED_NODE);
         }
 
@@ -113,8 +98,8 @@ namespace M4Graphs.Generators
         /// <param name="nodeId">The node's identifier.</param>
         public void Connect(string edgeId, string nodeId)
         {
-            var node = Nodes[nodeId];
-            Edges[edgeId].SetTargetNode(node);
+            var node = _elements.GetNode(nodeId);
+            _elements.GetEdge(edgeId).SetTargetNode(node);
         }
 
         /// <summary>
@@ -122,51 +107,24 @@ namespace M4Graphs.Generators
         /// </summary>
         public ElementCollection<DefaultNodeElement, DefaultEdgeElement> GetElements()
         {
-            //var nodes = Nodes.Select(node => node.Value.ToGeneratedDrawable(Margins.X, Margins.Y)).ToDictionary(node => node.Id);
-            //var edges = Edges.Select(edge => edge.Value.ToGeneratedDrawable(Margins.X, Margins.Y)).ToDictionary(edge => edge.Id);
-
-            var collection = new ElementCollection<DefaultNodeElement, DefaultEdgeElement>(Nodes, Edges);
+            var collection = new ElementCollection<DefaultNodeElement, DefaultEdgeElement>(_elements.Nodes, _elements.Edges);
             return collection;
         }
 
         private void AddEdge(DefaultEdgeElement edgeElement)
         {
-            Edges.Add(edgeElement.Id, edgeElement);
-            EdgesFromNode[edgeElement.SourceNode.Id] = GetEdgesFromNode(edgeElement.SourceNode.Id) + 1;
+            _elements.Add(edgeElement);
         }
 
 
         private void AddNode(DefaultNodeElement node)
         {
-            Nodes.Add(node.Id, node);
-            var width = Measurements.TextToXLevel(node.Text);
-            //NodesAtY[node.Position.Y] = GetNodesAtY(node.Position.Y) + width;
-        }
-
-
-
-        private int GetEdgesFromNode(string nodeId)
-        {
-            if (EdgesFromNode.TryGetValue(nodeId, out int count))
-            {
-                return count;
-            }
-            return 0;
-        }
-
-        private int GetNodesAtY(int y)
-        {
-            if (NodesAtY.TryGetValue(y, out int count))
-            {
-                return count;
-            }
-            return 0;
+            _elements.Add(node);
         }
 
         private void Reset()
         {
-            Nodes.Clear();
-            Edges.Clear();
+            _elements.Clear();
             StartNode = null;
         }
     }

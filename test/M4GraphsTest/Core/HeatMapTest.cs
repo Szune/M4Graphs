@@ -20,7 +20,7 @@ namespace M4GraphsTest.Core
         public void GetHeat_Throws_If_Element_Does_Not_Exist_In_HeatMap()
         {
             Action act = () => map.GetHeat("e1");
-            act.ShouldThrowExactly<KeyNotFoundException>();
+            act.Should().ThrowExactly<KeyNotFoundException>();
         }
 
         [TestMethod]
@@ -78,7 +78,7 @@ namespace M4GraphsTest.Core
         public void AddHeat_Does_Not_Throw()
         {
             Action act = () => map.AddHeat("n1");
-            act.ShouldNotThrow();
+            act.Should().NotThrow();
         }
     }
 }

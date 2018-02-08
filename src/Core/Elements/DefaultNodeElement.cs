@@ -24,7 +24,7 @@ namespace M4Graphs.Core.Elements
         /// <summary>
         /// Returns the node's parent node.
         /// </summary>
-        public DefaultNodeElement ParentNode { get; set; }
+        public DefaultNodeElement ParentNode { get; private set; }
 
         /// <summary>
         /// Returns all edges that end at this node.
