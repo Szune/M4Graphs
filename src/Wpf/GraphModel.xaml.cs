@@ -10,7 +10,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using M4Graphs.Core.Elements;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
@@ -22,8 +21,6 @@ namespace M4Graphs.Wpf
     /// </summary>
     public partial class GraphModel : IDynamicGraphModel<GraphModel>
     {
-        // TODO: Change class so that it doesn't care about what type of nodes and edges are used and only draw what's to be drawn... somehow..
-        private IModel<INodeElement, IEdgeElement> _model;
         private int NodeWidth { get; } = 50;
         private int NodeHeight { get; } = 20;
 
@@ -43,8 +40,6 @@ namespace M4Graphs.Wpf
                 ColorManager.FilteredColor = value;
             }
         }
-
-        public IModel<INodeElement, IEdgeElement> Model => _model;
 
         /// <summary>
         /// 0: 25%, 1: 50%, 2: 75%, 3: 100%, 4: 150%, 5: 200%
@@ -82,15 +77,6 @@ namespace M4Graphs.Wpf
         public GraphModel(Brush background, int nodeWidth, int nodeHeight) : this(nodeWidth, nodeHeight)
         {
             Main.Background = background;
-        }
-
-        /// <summary>
-        /// Sets the associated <see cref="_model"/> used for drawing.
-        /// </summary>
-        /// <param name="model"></param>
-        public void Set(IModel<INodeElement, IEdgeElement> model)
-        {
-            _model = model;
         }
 
         /// <summary>
