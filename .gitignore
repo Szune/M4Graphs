@@ -265,3 +265,5 @@ __pycache__/
 *.pyc
 /.sonarqube
 /src/Core/DrawableModelElements.Obsolete
+/dotCover
+/dotCover.html

@@ -53,7 +53,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColorManager.cs" />
+    <Compile Include="ColorScheme.cs" />
     <Compile Include="Components\Edge.xaml.cs">
       <DependentUpon>Edge.xaml</DependentUpon>
     </Compile>

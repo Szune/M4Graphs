@@ -32,12 +32,14 @@ namespace M4Graphs.Wpf
 
         private readonly Filters _filters = new Filters();
 
+        public readonly ColorScheme ColorScheme;
+
         public static readonly DependencyProperty ModelBackgroundProperty = DependencyProperty.Register("ModelBackground", typeof(Brush), typeof(GraphModel), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, FrameworkPropertyMetadataOptions.AffectsRender));
         public Brush ModelBackground
         {
             get => (Brush)GetValue(ModelBackgroundProperty);
             set { SetValue(ModelBackgroundProperty, value);
-                ColorManager.FilteredColor = value;
+                ColorScheme.SetFilteredColor(value);
             }
         }
 
@@ -60,12 +62,13 @@ namespace M4Graphs.Wpf
             Measurements.NodeMinWidth = NodeWidth;
             _originalTransform = ModelBoard.RenderTransform as MatrixTransform;
             _currentTransform = ModelBoard.RenderTransform as MatrixTransform;
+            ColorScheme = Wpf.ColorScheme.Default;
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public GraphModel(int nodeWidth, int nodeHeight)
+        public GraphModel(int nodeWidth, int nodeHeight) : this()
         {
             NodeWidth = nodeWidth;
             NodeHeight = nodeHeight;
@@ -160,7 +163,7 @@ namespace M4Graphs.Wpf
 
         private void UpdateHeat(string idToExempt)
         {
-            var elements = _heatMap.GetElements();
+            var elements = _heatMap.GetVisitedElements();
             foreach (var id in elements)
             {
                 if (id.Equals(idToExempt, StringComparison.InvariantCultureIgnoreCase)) continue;
@@ -216,10 +219,6 @@ namespace M4Graphs.Wpf
 
         private void MoveModelBoard(Point point)
         {
-            //const double OutOfBoundsLimit = 400;
-            // Reduce move speed by half
-            //point.X *= 0.5;
-            //point.Y *= 0.5;
             // Move model by adjusting margins
             var margin = ModelBoard.Margin;
             var left = margin.Left + point.X;
@@ -231,15 +230,8 @@ namespace M4Graphs.Wpf
                 top.Clamp(-_gridActualHeight / divideBy,
                     _gridActualHeight / divideBy),
                 margin.Right, margin.Bottom);
-            
-            //ModelBoard.Margin = new Thickness(
-            //    left.Clamp(-ModelBoard.ActualWidth + OutOfBoundsLimit,
-            //        ModelBoard.ActualWidth - OutOfBoundsLimit),
-            //    top.Clamp(-ModelBoard.ActualHeight + OutOfBoundsLimit,
-            //        ModelBoard.ActualHeight - OutOfBoundsLimit),
-            //    margin.Right, margin.Bottom);
 
-            // Make scroll thingy workyworky
+            // TODO: Make scroll thingy work, should consider rewriting the entire thing to not work around margins?
 
             UpdateScrollBar();
         }
@@ -251,8 +243,6 @@ namespace M4Graphs.Wpf
             var maxY = _elements.Values.Max(_ => _.Position.Y) * currentZoom;
             var leftMargin = Math.Abs(ModelBoard.Margin.Left);
             var topMargin = Math.Abs(ModelBoard.Margin.Top);
-            //var leftMargin = GetMarginSize(ModelBoard.Margin.Left);
-            //var topMargin = GetMarginSize(ModelBoard.Margin.Top);
             ModelBoard.Width = maxX + leftMargin;
             ModelBoard.Height = maxY + topMargin;
         }

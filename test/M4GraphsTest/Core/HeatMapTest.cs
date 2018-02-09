@@ -30,7 +30,7 @@ namespace M4GraphsTest.Core
             map.AddHeat("n1");
             map.AddHeat("n1");
             // assert
-            map.GetHeat("n1").Should().Be(1);
+            map.GetHeat("n1").Should().BeApproximately(1, 0.0000000001);
         }
         
         [TestMethod]
@@ -40,7 +40,7 @@ namespace M4GraphsTest.Core
             map.AddHeat("n1");
             map.AddHeat("e1");
             // assert
-            map.GetHeat("n1").Should().Be(0.5);
+            map.GetHeat("n1").Should().BeApproximately(0.5, 0.0001);
         }
 
         [TestMethod]
@@ -55,8 +55,8 @@ namespace M4GraphsTest.Core
             map.AddHeat("n2");
             map.AddHeat("n2");
             // assert
-            map.GetHeat("n1").Should().Be(0.4);
-            map.GetHeat("e1").Should().Be(0.4);
+            map.GetHeat("n1").Should().BeApproximately(0.4, 0.0001);
+            map.GetHeat("e1").Should().BeApproximately(0.4, 0.0001);
         }
 
         [TestMethod]
@@ -71,14 +71,60 @@ namespace M4GraphsTest.Core
             map.AddHeat("n2");
             map.AddHeat("n2");
             // assert
-            map.GetHeat("n2").Should().Be(0.2);
+            map.GetHeat("n2").Should().BeApproximately(0.2, 0.0001);
         }
 
         [TestMethod]
-        public void AddHeat_Does_Not_Throw()
+        public void AddHeat_should_throw_if_id_is_null()
         {
-            Action act = () => map.AddHeat("n1");
-            act.Should().NotThrow();
+            Action act = () => map.AddHeat(null);
+            act.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void GetVisitedElements_returns_all_visited_elements()
+        {
+            map.AddHeat("n1");
+            map.AddHeat("n2");
+            map.GetVisitedElements().Should().Contain("n1", "n2");
+        }
+
+        [TestMethod]
+        public void GetVisitedElements_should_return_empty_IEnumerable_when_no_elements_have_been_visited()
+        {
+            map.GetVisitedElements().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void Reset_should_reset_visited_elements()
+        {
+            map.AddHeat("n1");
+            map.Reset();
+            map.GetVisitedElements().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void Reset_should_reset_total_hits()
+        {
+                               // assumptions: (correct if total hits are reset)
+            map.AddHeat("n1"); // n1 heat = 1
+            map.Reset();       // n1 heat = non-existent
+            map.AddHeat("n1"); // n1 heat = 1
+            map.AddHeat("n2"); // n1 heat = 0.5 (2 different elements have been visited an equal amount of times)
+            map.GetHeat("n1").Should().BeApproximately(0.5, 0.0001);
+        }
+
+        [TestMethod]
+        public void TryGetHeat_should_return_true_if_id_is_present()
+        {
+            map.AddHeat("n1");
+            map.TryGetHeat("n1", out _).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void TryGetHeat_should_return_false_if_id_is_not_present()
+        {
+            map.TryGetHeat("n1", out _).Should().BeFalse();
         }
     }
 }

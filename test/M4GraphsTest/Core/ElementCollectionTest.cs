@@ -52,8 +52,8 @@ namespace M4GraphsTest.Core
         {
             PrepareCollection();
             _sut.Clear();
-            _sut.Nodes.Should().HaveCount(0);
-            _sut.Edges.Should().HaveCount(0);
+            _sut.Nodes.Should().BeEmpty();
+            _sut.Edges.Should().BeEmpty();
         }
 
         [TestMethod]
@@ -168,7 +168,7 @@ namespace M4GraphsTest.Core
         {
             AddNode();
             _sut.RemoveNode(elementId).Should().BeTrue();
-            _sut.Nodes.Should().HaveCount(0);
+            _sut.Nodes.Should().BeEmpty();
         }
 
         [TestMethod]
@@ -176,7 +176,7 @@ namespace M4GraphsTest.Core
         {
             AddEdge();
             _sut.RemoveEdge(elementId);
-            _sut.Edges.Should().HaveCount(0);
+            _sut.Edges.Should().BeEmpty();
         }
 
         [TestMethod]

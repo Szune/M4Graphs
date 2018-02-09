@@ -19,13 +19,14 @@ namespace M4Graphs.Core.Geometry
             var yPrecision = targetHeight / 2;
             var xPrecision = targetWidth / 2;
 
-            // TODO: Rewrite in a way that is easy to understand yet doesn't require instantiating more variables
-            var x2 = nextLastPoint.X;
-            var y2 = nextLastPoint.Y;
-            var x1 = targetCenter.X;
-            var y1 = targetCenter.Y;
-
-            var angle = Math.Acos((y2 - y1) / Math.Sqrt(Math.Pow(y2 - y1, 2) + Math.Pow(x2 - x1, 2)));
+            // arccos((y2 - y1) / sqrt((y2 - y1)^2 + (x2 - x1)^2)
+            var angle = Math.Acos(
+                (nextLastPoint.Y - targetCenter.Y)
+                / 
+                Math.Sqrt(
+                    Math.Pow(nextLastPoint.Y - targetCenter.Y, 2)
+                    +
+                    Math.Pow(nextLastPoint.X - targetCenter.X, 2)));
 
             var nearbyCathetus = targetHeight / 2;
             var opposingCathetus = nearbyCathetus * Math.Tan(angle);

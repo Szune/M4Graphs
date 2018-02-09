@@ -14,17 +14,15 @@ namespace M4Graphs.Wpf.Rendering
     {
         private readonly ElementCollection<GraphmlNodeElement, GraphmlEdgeElement> _unmodifiedElements;
         private ElementCollection<GraphmlNodeElement, GraphmlEdgeElement> _elements;
-        private Coordinate _offset;
         private readonly Coordinate _lowestCoordinate;
 
         public GraphmlRenderer(ElementCollection<GraphmlNodeElement, GraphmlEdgeElement> unmodifiedElements)
         {
             _unmodifiedElements = unmodifiedElements;
-            _offset = Coordinate.Zero;
             var lowX = -unmodifiedElements.Nodes.Min(n => n.X);
             var lowY = -unmodifiedElements.Nodes.Min(n => n.Y);
             _lowestCoordinate = new Coordinate(lowX, lowY);
-            UpdateElements(_offset, _lowestCoordinate);
+            UpdateElements(Coordinate.Zero, _lowestCoordinate);
         }
 
         private void UpdateElements(Coordinate offset, Coordinate lowestCoordinate)
@@ -39,8 +37,7 @@ namespace M4Graphs.Wpf.Rendering
 
         public void SetOffset(Coordinate offset)
         {
-            _offset = offset;
-            UpdateElements(_offset, _lowestCoordinate);
+            UpdateElements(offset, _lowestCoordinate);
         }
 
         public void RenderElements(GraphModel model)

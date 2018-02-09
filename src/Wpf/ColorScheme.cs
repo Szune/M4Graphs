@@ -5,24 +5,68 @@ namespace M4Graphs.Wpf
     /// <summary>
     /// A helper class for managing colors of elements.
     /// </summary>
-    public static class ColorManager
+    public class ColorScheme
     {
         /// <summary>
         /// Returns the color used for elements the user hovers over.
         /// </summary>
-        public static readonly Brush HoverColor = Brushes.CadetBlue;
+        public Brush HoverColor { get; private set; } = Brushes.CadetBlue;
         /// <summary>
         /// Returns the color used for activated elements.
         /// </summary>
-        public static readonly Brush ActivatedColor = Brushes.Lavender;
+        public Brush ActivatedColor { get; private set; } = Brushes.Lavender;
 
         /// <summary>
         /// Returns the color used for filtered elements.
         /// </summary>
-        // TODO: Make these colors individually customizable per model
-        public static Brush FilteredColor = Brushes.LightSteelBlue;
+        public Brush FilteredColor { get; private set; } = Brushes.LightSteelBlue;
+
+        public Brush EdgeColor { get; private set; } = Brushes.Black;
+
+        public Brush NodeColor { get; private set; } = Brushes.DarkGoldenrod;
 
         private const int LowestColor = 40;
+
+        public static ColorScheme Default => new ColorScheme();
+
+        public ColorScheme()
+        {
+        }
+
+        public ColorScheme(Brush hoverColor, Brush activatedColor, Brush filteredColor, Brush edgeColor, Brush nodeColor)
+        {
+            HoverColor = hoverColor;
+            ActivatedColor = activatedColor;
+            FilteredColor = filteredColor;
+            EdgeColor = edgeColor;
+            NodeColor = nodeColor;
+        }
+
+
+        public void SetFilteredColor(Brush color)
+        {
+            FilteredColor = color;
+        }
+
+        public void SetActivatedColor(Brush color)
+        {
+            ActivatedColor = color;
+        }
+
+        public void SetHoverColor(Brush color)
+        {
+            HoverColor = color;
+        }
+
+        public void SetEdgeColor(Brush color)
+        {
+            EdgeColor = color;
+        }
+
+        public void SetNodeColor(Brush color)
+        {
+            NodeColor = color;
+        }
 
         /// <summary>
         /// Gets a green <see cref="Brush"/> based on the specified heat.

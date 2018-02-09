@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -84,8 +85,13 @@ namespace M4Graphs.Wpf.Shapes
 
         private void GetGeometry(StreamGeometryContext context)
         {
-            if (Points.Count < 2) return;
-            //if (Points.Count < 2) throw new ArgumentOutOfRangeException("Points", "a polyline arrow requires at least 2 points");
+            if (Points.Count < 2)
+            {
+                if (!DesignerProperties.GetIsInDesignMode(this))
+                    throw new InvalidOperationException("a polyline arrow requires at least 2 points");
+                return;
+            }
+
             context.BeginFigure(Points[0], true, false);
             foreach(var pt in Points)
             {

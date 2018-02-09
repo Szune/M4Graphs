@@ -14,7 +14,8 @@ namespace M4Graphs.Wpf.Components
     /// </summary>
     public partial class Node
     {
-        private Brush ColorNormal = Brushes.DarkGoldenrod;
+        private Brush _colorNormal;
+        private readonly ColorScheme _colorScheme;
 
         public override string Id { get; }
         public override ElementStates States { get; protected set; } = ElementStates.Normal;
@@ -37,13 +38,9 @@ namespace M4Graphs.Wpf.Components
             set { SetValue(PositionProperty, value); }
         }
 
-        public Node()
+        public Node(string id, string text, double x, double y, double width, double height)
         {
             InitializeComponent();
-        }
-
-        public Node(string id, string text, double x, double y, double width, double height) : this()
-        {
             Id = id;
             NodeText.Text = text;
             NodeBackground.Width = width;
@@ -51,6 +48,14 @@ namespace M4Graphs.Wpf.Components
             NodeBackground.Margin = new Thickness(x, y, 0, 0);
             TextBorder.Margin = new Thickness(x, y, 0, 0);
             SetPosition(x + width, y + height);
+            _colorScheme = ColorScheme.Default;
+            _colorNormal = _colorScheme.NodeColor;
+        }
+
+        public Node(string id, string text, double x, double y, double width, double height, ColorScheme colorScheme) : this(id, text, x, y, width, height)
+        {
+            _colorScheme = colorScheme;
+            _colorNormal = colorScheme.NodeColor;
         }
 
         private void SetPosition(double maxX, double maxY)
@@ -83,7 +88,7 @@ Position: {NodeBackground.Margin.Left},{NodeBackground.Margin.Top}");
 
         private void Grid_MouseEnter(object sender, MouseEventArgs e)
         {
-            SetColor(ColorManager.HoverColor);
+            SetColor(_colorScheme.HoverColor);
         }
 
         private void Grid_MouseLeave(object sender, MouseEventArgs e)
@@ -95,13 +100,13 @@ Position: {NodeBackground.Margin.Left},{NodeBackground.Margin.Top}");
         private void UpdateColor()
         {
             if (States == ElementStates.Normal) // just use normal color
-                SetColor(ColorNormal);
+                SetColor(_colorNormal);
             else
             {
                 if (States.HasFlag(ElementStates.Activated)) // force activated color
-                    SetColor(ColorManager.ActivatedColor);
+                    SetColor(_colorScheme.ActivatedColor);
                 else if (States.HasFlag(ElementStates.Filtered)) // use filtered color
-                    SetColor(ColorManager.FilteredColor);
+                    SetColor(_colorScheme.FilteredColor);
             }
         }
 
@@ -114,21 +119,21 @@ Position: {NodeBackground.Margin.Left},{NodeBackground.Margin.Top}");
         public override void UpdateHeat(double heat)
         {
             _lastHeat = heat;
-            ColorNormal = GetColor(_lastHeat);
+            _colorNormal = GetColor(_lastHeat);
             UpdateColor();
         }
 
         private Brush GetColor(double heat)
         {
             if (HasErrors)
-                return ColorManager.GetRedBrush(heat);
-            return ColorManager.GetGreenBrush(heat);
+                return ColorScheme.GetRedBrush(heat);
+            return ColorScheme.GetGreenBrush(heat);
         }
 
         public override void AddError(ExecutingElementMethodError error)
         {
             Errors.Add(error);
-            ColorNormal = GetColor(_lastHeat);
+            _colorNormal = GetColor(_lastHeat);
             UpdateColor();
         }
 

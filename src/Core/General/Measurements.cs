@@ -23,20 +23,11 @@ namespace M4Graphs.Core.General
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static int NodeWidth(string text)
+        public static int NodeWidthFromText(string text)
         {
             // TODO: Measure actual text with font, don't use hardcoded constants
-            int hardcodedNumberChangeASAP = 8; // number that will most likely only work with the default Wpf textblock font
-            return (text.Length * hardcodedNumberChangeASAP) + NodeWidthMargin;
-        }
-
-        /// <summary>
-        /// Returns the amount of x-levels a node with the specified text would require to not overlap another node.
-        /// </summary>
-        public static int TextToXLevel(string text)
-        {
-            // TODO: Finish the TODO in NodeWidth()
-            return NodeWidth(text) / NodeMinWidth;
+            const int hardcodedNumberChangeAsap = 8;
+            return (text.Length * hardcodedNumberChangeAsap) + NodeWidthMargin;
         }
 
         /// <summary>

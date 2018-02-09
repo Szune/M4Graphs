@@ -14,7 +14,8 @@ namespace M4Graphs.Wpf.Components
     /// </summary>
     public partial class Edge
     {
-        private Brush ColorNormal = Brushes.Black;
+        private Brush _colorNormal;
+        private readonly ColorScheme _colorScheme;
 
         public override string Id { get; }
         public override ElementStates States { get; protected set; } = ElementStates.Normal;
@@ -22,67 +23,48 @@ namespace M4Graphs.Wpf.Components
 
         public override bool HasErrors => Errors.Any();
 
-        private enum Direction
-        {
-            Left = 1,
-            Right = 2
-        }
-
         public List<ExecutingElementMethodError> Errors { get; } = new List<ExecutingElementMethodError>();
 
-        private Direction ArrowDirection;
 
         public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(Coordinate), typeof(Edge), new FrameworkPropertyMetadata(Coordinate.Zero, FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsRender));
         public override Coordinate Position
         {
-            get { return (Coordinate)GetValue(PositionProperty); }
-            set { SetValue(PositionProperty, value); }
+            get => (Coordinate)GetValue(PositionProperty);
+            set => SetValue(PositionProperty, value);
         }
 
         private double _lastHeat;
 
-        public Edge()
+        public Edge(string id, string text, PointCollection points)
         {
             InitializeComponent();
-            var dir = (Direction)(Measurements.GetRandom(1000, 2999) / 1000);
-            ArrowDirection = dir;
-        }
-
-        public Edge(string id, string text, PointCollection points) : this()
-        {
             Id = id;
             SetPoints(points);
             var x = points.Min(p => p.X);
             var y = points.Min(p => p.Y);
             EdgeText.Text = text;
             EdgeText.Margin = new Thickness(x, y, 0, 0);
+            _colorScheme = ColorScheme.Default;
+            _colorNormal = _colorScheme.EdgeColor;
         }
 
 
-        public Edge(string id, string text, PointCollection points, Point labelPoint) : this()
+        public Edge(string id, string text, PointCollection points, Point labelPoint) : this(id, text, points)
         {
-            Id = id;
-            SetPoints(points);
-            EdgeText.Text = text;
             EdgeText.Margin = new Thickness(labelPoint.X, labelPoint.Y, 0, 0);
         }
 
-        public Edge(string id, SolidColorBrush color, PointCollection points) : this()
+        public Edge(string id, string text, PointCollection points, ColorScheme colorScheme) : this(id, text, points)
         {
-            Id = id;
-            EdgeArrow.Stroke = color;
-            ColorNormal = color;
-            SetPoints(points);
+            _colorScheme = colorScheme;
+            _colorNormal = colorScheme.EdgeColor;
         }
 
-        public Edge(string id, string text, SolidColorBrush color, PointCollection points) : this(id, color, points)
+        public Edge(string id, string text, PointCollection points, Point labelPoint, ColorScheme colorScheme) : this(id, text, points, labelPoint)
         {
-            var x = points?.Min(p => p.X) ?? 0;
-            var y = points?.Min(p => p.Y) ?? 0;
-            EdgeText.Text = text;
-            EdgeText.Margin = new Thickness(x, y, 0, 0);
+            _colorScheme = colorScheme;
+            _colorNormal = colorScheme.EdgeColor;
         }
-
 
         private void SetPoints(PointCollection points)
         {
@@ -91,35 +73,6 @@ namespace M4Graphs.Wpf.Components
             var x = points?.Max(p => p.X) ?? 0;
             var y = points?.Max(p => p.Y) ?? 0;
             Position = new Coordinate(x, y);
-        }
-
-        private PointCollection BendEdge(PointCollection points)
-        {
-            var pointCount = Measurements.InterpolationCount * points.Count;
-            var roundedPoints = new PointCollection();
-            var start = points.First();
-            var end = points.Last();
-            var xStep = (end.X - start.X) / pointCount;
-            var yStep = (end.Y - start.Y) / pointCount;
-
-            for(int i = 0; i < pointCount; i++)
-            {
-                if (ArrowDirection == Direction.Right)
-                {
-                    if (i < (pointCount / 2))
-                        roundedPoints.Add(new Point(start.X + (xStep * i) + i, start.Y + (yStep * i)));
-                    else
-                        roundedPoints.Add(new Point(start.X + (xStep * i) + (pointCount - i), start.Y + (yStep * i)));
-                }
-                else if (ArrowDirection == Direction.Left)
-                {
-                    if (i < (pointCount / 2))
-                        roundedPoints.Add(new Point(start.X + (xStep * i) - i, start.Y + (yStep * i)));
-                    else
-                        roundedPoints.Add(new Point(start.X + (xStep * i) - (pointCount - i), start.Y + (yStep * i)));
-                }
-            }
-            return roundedPoints;
         }
 
         public override void Activate()
@@ -145,7 +98,7 @@ Position of last point: {EdgeArrow.Points.Last().X},{EdgeArrow.Points.Last().Y}"
 
         private void EdgeText_MouseEnter(object sender, MouseEventArgs e)
         {
-            SetColor(ColorManager.HoverColor);
+            SetColor(_colorScheme.HoverColor);
         }
 
         private void EdgeText_MouseLeave(object sender, MouseEventArgs e)
@@ -157,13 +110,13 @@ Position of last point: {EdgeArrow.Points.Last().X},{EdgeArrow.Points.Last().Y}"
         private void UpdateColor()
         {
             if (States == ElementStates.Normal) // just use normal color
-                SetColor(ColorNormal);
+                SetColor(_colorNormal);
             else
             {
                 if (States.HasFlag(ElementStates.Activated)) // force activated color
-                    SetColor(ColorManager.ActivatedColor);
+                    SetColor(_colorScheme.ActivatedColor);
                 else if (States.HasFlag(ElementStates.Filtered)) // use filtered color
-                    SetColor(ColorManager.FilteredColor);
+                    SetColor(_colorScheme.FilteredColor);
             }
         }
 
@@ -176,21 +129,21 @@ Position of last point: {EdgeArrow.Points.Last().X},{EdgeArrow.Points.Last().Y}"
         public override void UpdateHeat(double heat)
         {
             _lastHeat = heat;
-            ColorNormal = GetColor(_lastHeat);
+            _colorNormal = GetColor(_lastHeat);
             UpdateColor();
         }
 
         private Brush GetColor(double heat)
         {
             if (HasErrors)
-                return ColorManager.GetRedBrush(heat);
-            return ColorManager.GetGreenBrush(heat);
+                return ColorScheme.GetRedBrush(heat);
+            return ColorScheme.GetGreenBrush(heat);
         }
 
         public override void AddError(ExecutingElementMethodError error)
         {
             Errors.Add(error);
-            ColorNormal = GetColor(_lastHeat);
+            _colorNormal = GetColor(_lastHeat);
             UpdateColor();
         }
 

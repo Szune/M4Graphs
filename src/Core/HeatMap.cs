@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace M4Graphs.Core
@@ -12,14 +13,14 @@ namespace M4Graphs.Core
         /// key -> string -> elementId, value -> long -> amount of hits
         /// </summary>
         private Dictionary<string, double> ElementHits { get; } = new Dictionary<string, double>();
-        private double _hitsTotal;
+        private double _totalHits;
 
         /// <summary>
         /// Returns a list of element ids that have been visited so far.
         /// </summary>
-        public List<string> GetElements()
+        public IEnumerable<string> GetVisitedElements()
         {
-            return ElementHits.Select(kvp => kvp.Key).ToList();
+            return ElementHits.Keys;
         }
 
         /// <summary>
@@ -30,7 +31,18 @@ namespace M4Graphs.Core
         public double GetHeat(string id)
         {
             if (!ElementHits.ContainsKey(id)) throw new KeyNotFoundException($"The element '{id}' has not yet been added to the heat map.");
-            return (ElementHits[id] / _hitsTotal);
+            return ElementHits[id] / _totalHits;
+        }
+
+        public bool TryGetHeat(string id, out double heat)
+        {
+            if (ElementHits.TryGetValue(id, out var hits))
+            {
+                heat = hits / _totalHits;
+                return true;
+            }
+            heat = default(double);
+            return false;
         }
 
         /// <summary>
@@ -39,11 +51,12 @@ namespace M4Graphs.Core
         /// <param name="id">The element's identifier.</param>
         public void AddHeat(string id)
         {
+            if (id == null) throw new ArgumentNullException(nameof(id));
             if (ElementHits.ContainsKey(id))
                 ElementHits[id] += 1;
             else
                 ElementHits[id] = 1;
-            _hitsTotal++;
+            _totalHits++;
         }
 
         /// <summary>
@@ -52,7 +65,7 @@ namespace M4Graphs.Core
         public void Reset()
         {
             ElementHits.Clear();
-            _hitsTotal = 0;
+            _totalHits = 0;
         }
     }
 }
