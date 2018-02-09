@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace M4Graphs.Core.Geometry
 {
-    /// <inheritdoc />
     /// <summary>
     /// Immutable class representing a point in a model.
     /// </summary>
-    public class Coordinate : IEquatable<Coordinate>
+    public struct Coordinate : IEquatable<Coordinate>
     {
         /// <summary>
         /// Returns a new point with <see cref="X"/> and <see cref="Y"/> values set to zero.
@@ -43,33 +41,33 @@ namespace M4Graphs.Core.Geometry
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Coordinate);
+            return obj is Coordinate coordinate && Equals(coordinate);
         }
 
-        public virtual bool Equals(Coordinate other)
+        public bool Equals(Coordinate other)
         {
-            const double tolerance = 0.01;
-            return other != null &&
-                   Math.Abs(X - other.X) < tolerance &&
+            const double tolerance = 0.0001;
+            return Math.Abs(X - other.X) < tolerance &&
                    Math.Abs(Y - other.Y) < tolerance;
         }
 
         public override int GetHashCode()
         {
             var hashCode = 1861411795;
+            hashCode = hashCode * -1521134295 + base.GetHashCode();
             hashCode = hashCode * -1521134295 + X.GetHashCode();
             hashCode = hashCode * -1521134295 + Y.GetHashCode();
             return hashCode;
         }
 
-        public static bool operator ==(Coordinate point1, Coordinate point2)
+        public static bool operator ==(Coordinate coordinate1, Coordinate coordinate2)
         {
-            return EqualityComparer<Coordinate>.Default.Equals(point1, point2);
+            return coordinate1.Equals(coordinate2);
         }
 
-        public static bool operator !=(Coordinate point1, Coordinate point2)
+        public static bool operator !=(Coordinate coordinate1, Coordinate coordinate2)
         {
-            return !(point1 == point2);
+            return !(coordinate1 == coordinate2);
         }
     }
 }

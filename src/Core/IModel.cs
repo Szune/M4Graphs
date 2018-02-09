@@ -5,9 +5,9 @@ namespace M4Graphs.Core
     /// <summary>
     /// Represents a model.
     /// </summary>
-    public interface IModel<TNodeType, TEdgeType> where TNodeType : INodeElement where TEdgeType : IEdgeElement
+    public interface IModel<TNode, TEdge> where TNode : INodeElement where TEdge : IEdgeElement
     {
-        ElementCollection<TNodeType, TEdgeType> GetElements();
+        ElementCollection<TNode, TEdge> GetElements();
         void ClearElements();
     }
 }

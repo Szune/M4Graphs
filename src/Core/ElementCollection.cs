@@ -4,14 +4,14 @@ using M4Graphs.Core.Elements;
 
 namespace M4Graphs.Core
 {
-    public class ElementCollection<TNodeType, TEdgeType> where TNodeType : INodeElement where TEdgeType : IEdgeElement
+    public class ElementCollection<TNode, TEdge> where TNode : INodeElement where TEdge : IEdgeElement
     {
-        private readonly Dictionary<string, TNodeType> _nodes = new Dictionary<string, TNodeType>();
-        private readonly Dictionary<string, TEdgeType> _edges = new Dictionary<string, TEdgeType>();
+        private readonly Dictionary<string, TNode> _nodes = new Dictionary<string, TNode>();
+        private readonly Dictionary<string, TEdge> _edges = new Dictionary<string, TEdge>();
         public int Count => _nodes.Count + _edges.Count;
 
-        public IEnumerable<TNodeType> Nodes => _nodes.Values;
-        public IEnumerable<TEdgeType> Edges => _edges.Values;
+        public IEnumerable<TNode> Nodes => _nodes.Values;
+        public IEnumerable<TEdge> Edges => _edges.Values;
 
         /// <summary>
         /// Initializes an empty collection.
@@ -21,36 +21,46 @@ namespace M4Graphs.Core
 
         }
 
-        public ElementCollection(IEnumerable<TNodeType> nodes, IEnumerable<TEdgeType> edges)
+        public ElementCollection(IEnumerable<TNode> nodes, IEnumerable<TEdge> edges)
         {
             _nodes = nodes.ToDictionary(node => node.Id);
             _edges = edges.ToDictionary(edge => edge.Id);
         }
 
-        public ElementCollection(Dictionary<string, TNodeType> nodes, Dictionary<string, TEdgeType> edges)
+        public ElementCollection(Dictionary<string, TNode> nodes, Dictionary<string, TEdge> edges)
         {
             _nodes = nodes;
             _edges = edges;
         }
 
-        public void Add(TEdgeType edge)
+        public void Add(TEdge edge)
         {
             _edges.Add(edge.Id, edge);
         }
 
-        public void Add(TNodeType node)
+        public void Add(TNode node)
         {
             _nodes.Add(node.Id, node);
         }
 
-        public TNodeType GetNode(string id)
+        public TNode GetNode(string id)
         {
             return _nodes[id];
         }
 
-        public TEdgeType GetEdge(string id)
+        public TEdge GetEdge(string id)
         {
             return _edges[id];
+        }
+
+        public bool TryGetNode(string id, out TNode node)
+        {
+            return _nodes.TryGetValue(id, out node);
+        }
+
+        public bool TryGetEdge(string id, out TEdge edge)
+        {
+            return _edges.TryGetValue(id, out edge);
         }
 
         public void Clear()
@@ -59,14 +69,14 @@ namespace M4Graphs.Core
             _edges.Clear();
         }
 
-        public void RemoveNode(string id)
+        public bool RemoveNode(string id)
         {
-            _nodes.Remove(id);
+            return _nodes.Remove(id);
         }
 
-        public void RemoveEdge(string id)
+        public bool RemoveEdge(string id)
         {
-            _edges.Remove(id);
+            return _edges.Remove(id);
         }
     }
 }
