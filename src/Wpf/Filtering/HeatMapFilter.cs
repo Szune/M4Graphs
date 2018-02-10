@@ -9,23 +9,23 @@ namespace M4Graphs.Wpf.Filtering
     {
         private bool _hideGreen;
         private bool _hideRed;
-        private readonly Filters parent;
+        private readonly Filters _parent;
 
         public HeatMapFilter(Filters parent)
         {
-            this.parent = parent;
+            _parent = parent;
         }
 
         public void ToggleGreen()
         {
             _hideGreen = !_hideGreen;
-            parent.Update();
+            _parent.Update();
         }
 
         public void ToggleRed()
         {
             _hideRed = !_hideRed;
-            parent.Update();
+            _parent.Update();
         }
 
         public List<Predicate<IModelElement>> GetFilters()

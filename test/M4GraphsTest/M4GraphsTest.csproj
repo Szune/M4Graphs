@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\ElementCollectionTest.cs" />
+    <Compile Include="Core\LevelListTest.cs" />
     <Compile Include="Parsers\ParserTest.cs" />
     <Compile Include="Core\HeatMapTest.cs" />
     <Compile Include="Generators\ModelGeneratorTest.cs" />

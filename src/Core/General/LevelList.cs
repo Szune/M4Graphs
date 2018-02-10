@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace M4Graphs.Core.General
 {
     /// <summary>
-    /// A zero-based list class consisting of levels.
+    /// List class consisting of levels.
     /// </summary>
     /// <typeparam name="TType"></typeparam>
     public class LevelList<TType> : IEnumerable<TType>
@@ -13,19 +13,20 @@ namespace M4Graphs.Core.General
 
 
         /// <summary>
-        /// Returns a value indicating if the current level is at either the bottom or the top of the list.
-        /// </summary>
-        public bool IsAtBoundary => IsAtBottom || IsAtTop;
-        /// <summary>
         /// Returns a value indicating if the current level is at the bottom of the list.
         /// </summary>
-        public bool IsAtBottom => _currentIndex == 0;
+        public bool IsAtFirst => _currentIndex == 0;
         /// <summary>
         /// Returns a value indicating if the current level is at the top of the list.
         /// </summary>
-        public bool IsAtTop => _currentIndex == _levels.Count - 1;
+        public bool IsAtLast => _currentIndex == _levels.Count - 1;
 
         private int _currentIndex;
+
+        /// <summary>
+        /// Returns the amount of levels contained in the LevelList.
+        /// </summary>
+        public int Count => _levels.Count;
 
         /// <summary>
         /// Returns the current level.
@@ -64,12 +65,21 @@ namespace M4Graphs.Core.General
         }
 
         /// <summary>
-        /// Goes down a level and returns it.
+        /// Sets the next level as current and returns it.
         /// </summary>
-        /// <returns></returns>
-        public TType Down()
+        public TType SelectNext()
         {
-            if (IsAtBottom) return Current;
+            if (IsAtLast) return Current;
+            _currentIndex++;
+            return Current;
+        }
+
+        /// <summary>
+        /// Sets previous level as current and returns it.
+        /// </summary>
+        public TType SelectPrevious()
+        {
+            if (IsAtFirst) return Current;
             _currentIndex--;
             return Current;
         }
@@ -77,7 +87,6 @@ namespace M4Graphs.Core.General
         /// <summary>
         /// Returns an enumerator that iterates through the <see cref="LevelList{TType}"/>.
         /// </summary>
-        /// <returns></returns>
         public IEnumerator<TType> GetEnumerator()
         {
             return _levels.GetEnumerator();
@@ -86,20 +95,27 @@ namespace M4Graphs.Core.General
         /// <summary>
         /// Returns an enumerator that iterates through the <see cref="LevelList{TType}"/>.
         /// </summary>
-        /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _levels.GetEnumerator();
         }
 
         /// <summary>
-        /// Goes up a level and returns it.
+        /// Selects and returns the first level.
         /// </summary>
-        /// <returns></returns>
-        public TType Up()
+        public TType SelectFirst()
         {
-            if (IsAtTop) return Current;
-            _currentIndex++;
+            _currentIndex = 0;
+            return Current;
+        }
+
+        /// <summary>
+        /// Selects and returns the last level.
+        /// </summary>
+        public TType SelectLast()
+        {
+            var lastIndex = _levels.Count - 1;
+            _currentIndex = lastIndex < 0 ? 0 : lastIndex;
             return Current;
         }
     }

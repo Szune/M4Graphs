@@ -1,6 +1,4 @@
-﻿using M4Graphs.Parsers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace M4GraphsTest.Core
 {

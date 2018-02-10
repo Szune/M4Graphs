@@ -1,12 +1,11 @@
 ﻿using M4Graphs.Core;
 using M4Graphs.Core.General;
-using System.Collections.Generic;
 using M4Graphs.Core.Elements;
 
 namespace M4Graphs.Generators
 {
     /// <summary>
-    /// An <see cref="IModel"/> generating the model during runtime.
+    /// A runtime generated model.
     /// </summary>
     public class DefaultModelGenerator : IModel<DefaultNodeElement, DefaultEdgeElement>, IModelGenerator
     {

@@ -190,7 +190,7 @@ namespace M4Graphs.Wpf
         /// <param name="point">The central point of the zooming</param>
         private void ZoomIn(Point point)
         {
-            _zoomStages.Up();
+            _zoomStages.SelectNext();
             ZoomModelBoard(_zoomStages.Current, point);
         }
 
@@ -200,7 +200,7 @@ namespace M4Graphs.Wpf
         /// <param name="point">The central point of the zooming</param>
         private void ZoomOut(Point point)
         {
-            _zoomStages.Down();
+            _zoomStages.SelectPrevious();
             ZoomModelBoard(_zoomStages.Current, point);
         }
 

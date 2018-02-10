@@ -64,33 +64,6 @@ namespace M4Graphs.WpfTest
             }
         }
 
-        private void CreatePreconditionsForBuildingTheModel()
-        {
-            for (int i = 1; i < 6; i += 2)
-            {
-                doStuff.Add(Tuple.Create("n" + i, ModelElementFactory.CreateEdge("e" + (i + 1), "Edge" + (i + 1)), null as DefaultNodeElement, false));
-                doStuff.Add(Tuple.Create("e" + (i + 1), null as DefaultEdgeElement, ModelElementFactory.CreateNode("n" + (i + 2), "Node" + (i + 2)), false));
-            }
-
-            for (int i = 1; i < 6; i += 2)
-            {
-                doStuff.Add(Tuple.Create("n" + i, ModelElementFactory.CreateEdge("e" + (i + 10), "Edge" + (i + 10)), null as DefaultNodeElement, false));
-                doStuff.Add(Tuple.Create("e" + (i + 10), null as DefaultEdgeElement, ModelElementFactory.CreateNode("n" + (i + 11), "Nooooooooooooode" + (i + 11)), false));
-            }
-
-            for (int i = 1; i < 6; i += 2)
-            {
-                doStuff.Add(Tuple.Create("n" + i, ModelElementFactory.CreateEdge("e" + (i + 30), "Edge" + (i + 30)), null as DefaultNodeElement, false));
-                doStuff.Add(Tuple.Create("e" + (i + 30), null as DefaultEdgeElement, ModelElementFactory.CreateNode("n" + (i + 31), "Node" + (i + 31)), false));
-            }
-
-            for (int i = 1; i < 6; i += 2)
-            {
-                doStuff.Add(Tuple.Create("n" + (i + 11), ModelElementFactory.CreateEdge("e" + (i + 50), "Edge" + (i + 50)), ModelElementFactory.CreateNode("n" + i, "w/e"), true));
-            }
-            doStuffCopy = new List<Tuple<string, DefaultEdgeElement, DefaultNodeElement, bool>>(doStuff);
-        }
-
         private void Reset()
         {
             var model = ModelGenerator.Default.Margins(80, 40).StartNode("n1","Start").Build();
