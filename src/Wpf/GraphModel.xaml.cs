@@ -94,6 +94,7 @@ namespace M4Graphs.Wpf
 
         public void Draw(IRenderer<GraphModel> renderer)
         {
+            Reset();
             renderer.RenderElements(this);
         }
 

@@ -1,119 +1,102 @@
-﻿using M4Graphs.Core;
+﻿using M4Graphs.Core.Geometry;
+using M4Graphs.Parsers;
+using M4Graphs.Wpf.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Timers;
 using System.Windows;
-using M4Graphs.Core.Elements;
-using M4Graphs.Core.Geometry;
-using M4Graphs.Generators;
-using M4Graphs.Parsers;
-using M4Graphs.Wpf.Rendering;
 
 namespace M4Graphs.WpfTest
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        List<Tuple<string, DefaultEdgeElement, DefaultNodeElement, bool>> doStuff = new List<Tuple<string, DefaultEdgeElement, DefaultNodeElement, bool>>();
-        List<Tuple<string, DefaultEdgeElement, DefaultNodeElement, bool>> doStuffCopy = new List<Tuple<string, DefaultEdgeElement, DefaultNodeElement, bool>>();
-        Queue<Action> addHeat = new Queue<Action>();
+        private readonly Queue<Action> _addHeat = new Queue<Action>();
 
-        private Timer simulationTimer;
+        private readonly Timer _simulationTimer;
+
+        private readonly Random _random = new Random();
 
         public MainWindow()
         {
             InitializeComponent();
-            simulationTimer = new Timer(500);
-            simulationTimer.Enabled = false;
-            simulationTimer.Elapsed += SimulationTimer_Elapsed;
+            _simulationTimer = new Timer(500) {Enabled = false};
+            _simulationTimer.Elapsed += SimulationTimer_Elapsed;
         }
 
         private void SimulationTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Simulate();
+            _simulationTimer.Stop();
+            System.Threading.Thread.Sleep(_random.Next(300, 1000));
+            _simulationTimer.Start();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Reset();
-
-            var reader = ModelParser.Graphml.FromFile(@"D:\exempel.graphml").Build();
-            var renderer = WpfRenderer.Graphml(reader.GetElements());
-            renderer.SetOffset(new Coordinate(20, 20));
-            dgm.Draw(renderer);
-            CreatePreconditionsForSimulatingTheModel();
-            //CreatePreconditionsForBuildingTheModel();
         }
 
         private void CreatePreconditionsForSimulatingTheModel()
         {
-            for (int i = 0; i < 10; i++)
-            {
-                addHeat.Enqueue(() => dgm.ActivateElement("n0"));
-                addHeat.Enqueue(() => dgm.ActivateElement("e0"));
-                addHeat.Enqueue(() => dgm.ActivateElement("n2"));
-                addHeat.Enqueue(() => dgm.ActivateElement("n0"));
-                addHeat.Enqueue(() => dgm.ActivateElement("e1"));
-                addHeat.Enqueue(() => dgm.AddElementError("e1"));
-                addHeat.Enqueue(() => dgm.ActivateElement("n1"));
-                addHeat.Enqueue(() => dgm.ActivateElement("e3"));
-                addHeat.Enqueue(() => dgm.ActivateElement("n3"));
-                addHeat.Enqueue(() => dgm.AddElementError("n1"));
-            }
+            _addHeat.Clear();
+            _addHeat.Enqueue(() => dgm.ActivateElement("n1")); // Start
+            _addHeat.Enqueue(() => dgm.ActivateElement("e0")); // e_Home
+            _addHeat.Enqueue(() => dgm.ActivateElement("n0")); // v_Home
+            _addHeat.Enqueue(() => dgm.ActivateElement("e3")); // e_ResetPassword
+            _addHeat.Enqueue(() => dgm.ActivateElement("n4")); // v_PasswordIsReset
+            _addHeat.Enqueue(() => dgm.ActivateElement("e4")); // e_BackToHome
+            _addHeat.Enqueue(() => dgm.ActivateElement("n0")); // v_Home
+            _addHeat.Enqueue(() => dgm.ActivateElement("e1")); // e_Login
+            _addHeat.Enqueue(() => dgm.ActivateElement("n2")); // v_Storefront
+            _addHeat.Enqueue(() => dgm.ActivateElement("e2")); // e_AddItemToCart
+            _addHeat.Enqueue(() => dgm.ActivateElement("n3")); // v_ItemIsAddedToCart
+            _addHeat.Enqueue(() => dgm.ActivateElement("e8")); // e_ToStorefront
+            _addHeat.Enqueue(() => dgm.ActivateElement("n2")); // v_Storefront
+            _addHeat.Enqueue(() => dgm.ActivateElement("e6")); // e_DirectlyToCheckout
+            _addHeat.Enqueue(() => dgm.ActivateElement("n5")); // v_VerifyCheckout
+            _addHeat.Enqueue(() => dgm.ActivateElement("e7")); // e_BackToStorefront
+            _addHeat.Enqueue(() => dgm.ActivateElement("n2")); // v_Storefront
+            _addHeat.Enqueue(() => dgm.ActivateElement("e6")); // e_DirectlyToCheckout
+            _addHeat.Enqueue(() => dgm.ActivateElement("n5")); // v_VerifyCheckout
+            _addHeat.Enqueue(() => dgm.AddElementError("n5")); // error @ v_VerifyCheckout
+            _addHeat.Enqueue(() => dgm.ActivateElement("e7")); // e_BackToStorefront
+            _addHeat.Enqueue(() => dgm.ActivateElement("n2")); // v_Storefront
+            _addHeat.Enqueue(() => dgm.ActivateElement("e2")); // e_AddItemToCart
+            _addHeat.Enqueue(() => dgm.ActivateElement("n3")); // v_ItemIsAddedToCart
+            _addHeat.Enqueue(() => dgm.ActivateElement("e5")); // e_Checkout
+            _addHeat.Enqueue(() => dgm.ActivateElement("n5")); // v_VerifyCheckout
+            _addHeat.Enqueue(() => dgm.ActivateElement("e7")); // e_BackToStorefront
+            _addHeat.Enqueue(() => dgm.ActivateElement("n2")); // v_Storefront
+            _addHeat.Enqueue(() => dgm.ActivateElement("n1")); // Start
         }
 
         private void Reset()
         {
-            var model = ModelGenerator.Default.Margins(80, 40).StartNode("n1","Start").Build();
-            // TODO: make a renderer for DefaultModelGenerator
-            //dgm.Set(model);
-            //dgm.Draw();
+            //dgm = new GraphModel();
+            var reader = ModelParser.Graphml.FromFile(@"Models\demo.graphml").Build();
+            var renderer = WpfRenderer.Graphml(reader.GetElements());
+            renderer.SetOffset(new Coordinate(20, 20));
+            dgm.Draw(renderer);
+            CreatePreconditionsForSimulatingTheModel();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //BuildTree();
-            //System.Threading.Thread.Sleep(3000);
-            simulationTimer.Enabled = true;
+            _simulationTimer.Enabled = true;
         }
 
         private void Simulate()
         {
-            if (addHeat.Count < 1) return;
-            //dgm.Dispatcher.Invoke(() =>
-            //{
-                addHeat.Dequeue()();
-            //});
-        }
-
-        private void BuildTree()
-        {
-            //if (!doStuffCopy.Any()) return;
-            //var act = doStuffCopy.First();
-            //if (!act.Item4)
-            //{
-            //    if(act.Item2 != null)
-            //        (dgm.Model as DefaultModelGenerator).AddElement(act.Item1, act.Item2);
-            //    else
-            //    {
-            //        (dgm.Model as DefaultModelGenerator).AddElement(act.Item1, act.Item3);
-            //    }
-            //}
-            //else
-            //{
-            //    (dgm.Model as DefaultModelGenerator).AddElement(act.Item1, act.Item2);
-            //    (dgm.Model as DefaultModelGenerator).Connect(act.Item2.Id, act.Item3.Id);
-            //}
-            //doStuffCopy.Remove(doStuffCopy.First());
-            //dgm.Draw();
-            // TODO: rewrite DefaultModelGenerator and create a renderer for it
+            if (_addHeat.Count < 1) return;
+            _addHeat.Dequeue()();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            doStuffCopy = new List<Tuple<string, DefaultEdgeElement, DefaultNodeElement, bool>>(doStuff);
+            _simulationTimer.Enabled = false;
             Reset();
         }
     }
