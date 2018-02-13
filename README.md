@@ -24,4 +24,4 @@ Generally:
 - [ ] Refactor more code related to drawing
 - [ ] Test coverage
 
-![Demo of M4Graphs](https://raw.githubusercontent.com/Szune/M4Graphs/master/M4GraphsDemo.png)
+![Demo of M4Graphs](https://raw.githubusercontent.com/Szune/M4Graphs/8d75affb18331fd402c6f381bdb4ae1fe03fbd20/M4GraphsDemo.png)
